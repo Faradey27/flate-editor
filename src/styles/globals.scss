@@ -1,0 +1,32 @@
+@import 'helpers';
+
+:root {
+  --primaryColor: #2c2c2c;
+  --white: #fff;
+  --backgroundColor: #e5e5e5;
+
+  --spacing: 8;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
+    sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  background-color: var(--backgroundColor);
+  height: 100%;
+
+  #__next {
+    height: 100%;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}

@@ -1,5 +1,7 @@
+import classes from './Header.module.scss';
+
 const Header = () => {
-  return <header>HEADER</header>;
+  return <header className={classes.root} />;
 };
 
 export default Header;

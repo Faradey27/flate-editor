@@ -12,7 +12,8 @@
           "screens": "./src/screens",
           "api": "./src/api",
           "hooks": "./src/hooks",
-          "services": "./src/services"
+          "services": "./src/services",
+          "styles": "./src/styles"
         }
       }
     ]

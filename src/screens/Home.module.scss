@@ -1,0 +1,10 @@
+@import '../styles/helpers';
+
+.root {
+  height: 100%;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: spacing(29) 1fr spacing(29);
+}

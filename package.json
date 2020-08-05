@@ -18,7 +18,8 @@
     "next": "9.5.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-intl": "^5.4.5"
+    "react-intl": "^5.4.5",
+    "sass": "^1.26.10"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.2",

@@ -1,6 +1,6 @@
 import { IntlProvider } from 'react-intl';
 import { NextComponentType, NextPageContext } from 'next';
-import 'styles/globals.css';
+import 'styles/globals.scss';
 
 interface MyAppProps {
   Component: NextComponentType<NextPageContext, any, {}>;
