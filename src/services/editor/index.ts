@@ -55,10 +55,6 @@ export const initializeEditor = ({ view }: { view?: HTMLCanvasElement }) => {
     backgroundColor: theme.backgroundColor,
   });
 
-  app.stage.on('mousedown', () => {
-    console.log('DOWN');
-  });
-
   const rect = new PIXI.Graphics();
   rect.beginFill(theme.primaryColor);
   const rectWidth = 100;
@@ -107,22 +103,43 @@ export const initializeEditor = ({ view }: { view?: HTMLCanvasElement }) => {
     }
   });
 
-  function zoom(x: number, y: number, isZoomIn: boolean) {
-    const direction = isZoomIn ? 1 : -1;
-    const factor = 1 + direction * 0.01;
-    app.stage.scale.x *= factor;
-    app.stage.scale.y *= factor;
+  function zoom(s: number, x: number, y: number) {
+    s = 1 + (-s * 1) / 40;
 
-    // app.stage.x += app.stage.x - x;
-    // app.stage.y += app.stage.y - y;
+    // Restrict scale
+    s = Math.min(Math.max(0.8, s), 1.2);
+    // s = s < 0 ? 1 - (1.0149469882249833 - 1) : 1.0149469882249833;
+
+    const worldPos = {
+      x: (x - app.stage.x) / app.stage.scale.x,
+      y: (y - app.stage.y) / app.stage.scale.y,
+    };
+    const newScale = {
+      x: app.stage.scale.x * s,
+      y: app.stage.scale.y * s,
+    };
+
+    const newScreenPos = {
+      x: worldPos.x * newScale.x + app.stage.x,
+      y: worldPos.y * newScale.y + app.stage.y,
+    };
+
+    app.stage.x -= newScreenPos.x - x;
+    app.stage.y -= newScreenPos.y - y;
+    app.stage.scale.x = newScale.x;
+    app.stage.scale.y = newScale.y;
   }
+
+  view?.addEventListener('wheel', (e) => {
+    zoom(e.deltaY, e.offsetX, e.offsetY);
+  });
 
   document.body.addEventListener(
     'wheel',
     (e) => {
-      const delta = (-1 / 40) * e.wheelDelta;
+      // const delta = (-1 / 40) * e.wheelDelta;
 
-      zoom(e.clientX, e.clientY, delta < 0);
+      // zoom(e.clientX, e.clientY, delta < 0);
 
       e.preventDefault();
     },
