@@ -16,6 +16,8 @@ body {
     sans-serif, Apple Color Emoji, Segoe UI Emoji;
   background-color: var(--backgroundColor);
   height: 100%;
+  overflow: hidden;
+  touch-action: pan-x pan-y;
 
   #__next {
     height: 100%;

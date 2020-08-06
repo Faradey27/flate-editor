@@ -1,9 +1,16 @@
-import Canvas from 'components/Canvas';
+import dynamic from 'next/dynamic';
+
+import CanvasPlaceholder from 'components/CanvasPlaceholder';
 import ComponentsPanel from 'components/ComponentsPanel';
 import Header from 'components/Header';
 import PropertiesPanel from 'components/PropertiesPanel';
 
 import classes from './Home.module.scss';
+
+const DynamicComponentWithNoSSR = dynamic(
+  () => import('../components/Canvas'),
+  { ssr: false, loading: () => <CanvasPlaceholder /> }
+);
 
 const Home = () => {
   return (
@@ -11,7 +18,7 @@ const Home = () => {
       <Header />
       <div className={classes.content}>
         <ComponentsPanel />
-        <Canvas />
+        <DynamicComponentWithNoSSR />
         <PropertiesPanel />
       </div>
     </main>
