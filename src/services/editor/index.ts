@@ -18,7 +18,7 @@ const getCanvasTheme = () => {
 
 let isDrag = false;
 
-function onDragStart(event) {
+function onDragStart(this: any, event: any) {
   isDrag = true;
   // store a reference to the data
   // the reason for this is because of multitouch
@@ -30,14 +30,14 @@ function onDragStart(event) {
   this.shiftY = this.data.getLocalPosition(this.parent).y - this.y;
 }
 
-function onDragEnd(event) {
+function onDragEnd(this: any) {
   isDrag = false;
   this.dragging = false;
   // set the interaction data to null
   this.data = null;
 }
 
-function onDragMove(event) {
+function onDragMove(this: any) {
   if (this.dragging) {
     const newPosition = this.data.getLocalPosition(this.parent);
     this.x = newPosition.x - this.shiftX;
@@ -104,6 +104,7 @@ export const initializeEditor = ({ view }: { view?: HTMLCanvasElement }) => {
   });
 
   function zoom(s: number, x: number, y: number) {
+    /* eslint-disable */
     s = 1 + (-s * 1) / 40;
 
     // Restrict scale
