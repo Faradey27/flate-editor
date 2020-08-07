@@ -1,27 +1,14 @@
 import * as PIXI from 'pixi.js';
 
+import { enableCamera } from './camera';
+import { getEditorTheme } from './editorTheme';
+import { createStateManager } from './stateManager';
 import { enableZoom } from './zoom';
 
-const toHexNumberColor = (color: string) => {
-  return Number(`0x${color.substr(2, color.length)}`);
-};
-
-const getCanvasTheme = () => {
-  const styles = global.getComputedStyle(document.documentElement);
-
-  const primaryColor = styles.getPropertyValue('--primaryColor');
-  const backgroundColor = styles.getPropertyValue('--backgroundColor');
-
-  return {
-    primaryColor: toHexNumberColor(primaryColor),
-    backgroundColor: toHexNumberColor(backgroundColor),
-  };
-};
-
-let isDrag = false;
+const stateManager = createStateManager();
 
 function onDragStart(this: any, event: any) {
-  isDrag = true;
+  stateManager.startDragging();
   // store a reference to the data
   // the reason for this is because of multitouch
   // we want to track the movement of this particular touch
@@ -33,7 +20,7 @@ function onDragStart(this: any, event: any) {
 }
 
 function onDragEnd(this: any) {
-  isDrag = false;
+  stateManager.stopDragging();
   this.dragging = false;
   // set the interaction data to null
   this.data = null;
@@ -48,7 +35,7 @@ function onDragMove(this: any) {
 }
 
 export const initializeEditor = ({ view }: { view?: HTMLCanvasElement }) => {
-  const theme = getCanvasTheme();
+  const theme = getEditorTheme();
 
   const app = new PIXI.Application({
     antialias: true,
@@ -58,6 +45,7 @@ export const initializeEditor = ({ view }: { view?: HTMLCanvasElement }) => {
   });
 
   const zoom = enableZoom(app);
+  const camera = enableCamera(app, stateManager);
 
   const rect = new PIXI.Graphics();
   rect.beginFill(theme.primaryColor);
@@ -74,8 +62,7 @@ export const initializeEditor = ({ view }: { view?: HTMLCanvasElement }) => {
   circle.interactive = true;
   circle.buttonMode = true;
 
-  app.stage.addChild(rect);
-  app.stage.addChild(circle);
+  app.stage.addChild(rect, circle);
 
   rect
     .on('pointerdown', onDragStart)
@@ -89,27 +76,10 @@ export const initializeEditor = ({ view }: { view?: HTMLCanvasElement }) => {
     .on('pointerupoutside', onDragEnd)
     .on('pointermove', onDragMove);
 
-  let lastPos: { x: number; y: number } | null = null;
-
-  view?.addEventListener('pointerdown', (e) => {
-    lastPos = { x: e.offsetX, y: e.offsetY };
-  });
-
-  view?.addEventListener('pointerup', () => {
-    lastPos = null;
-  });
-
-  view?.addEventListener('pointermove', (e) => {
-    if (lastPos && !isDrag) {
-      app.stage.x += e.offsetX - lastPos.x;
-      app.stage.y += e.offsetY - lastPos.y;
-      lastPos = { x: e.offsetX, y: e.offsetY };
-    }
-  });
-
   return {
     release: () => {
       zoom.release();
+      camera.release();
       app.destroy();
     },
   };
