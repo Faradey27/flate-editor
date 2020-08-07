@@ -10,8 +10,14 @@ const Canvas = () => {
 
   useEffect(() => {
     if (canvasRef.current) {
-      initializeEditor({ view: canvasRef.current });
+      const editor = initializeEditor({ view: canvasRef.current });
+
+      return () => {
+        editor.release();
+      };
     }
+
+    return () => {};
   }, []);
 
   return <canvas className={classes.root} ref={canvasRef} />;

@@ -1,5 +1,7 @@
 import * as PIXI from 'pixi.js';
 
+import { enableZoom } from './zoom';
+
 const toHexNumberColor = (color: string) => {
   return Number(`0x${color.substr(2, color.length)}`);
 };
@@ -55,6 +57,8 @@ export const initializeEditor = ({ view }: { view?: HTMLCanvasElement }) => {
     backgroundColor: theme.backgroundColor,
   });
 
+  const zoom = enableZoom(app);
+
   const rect = new PIXI.Graphics();
   rect.beginFill(theme.primaryColor);
   const rectWidth = 100;
@@ -103,49 +107,10 @@ export const initializeEditor = ({ view }: { view?: HTMLCanvasElement }) => {
     }
   });
 
-  function zoom(s: number, x: number, y: number) {
-    /* eslint-disable */
-    s = 1 + (-s * 1) / 40;
-
-    // Restrict scale
-    s = Math.min(Math.max(0.8, s), 1.2);
-    // s = s < 0 ? 1 - (1.0149469882249833 - 1) : 1.0149469882249833;
-
-    const worldPos = {
-      x: (x - app.stage.x) / app.stage.scale.x,
-      y: (y - app.stage.y) / app.stage.scale.y,
-    };
-    const newScale = {
-      x: app.stage.scale.x * s,
-      y: app.stage.scale.y * s,
-    };
-
-    const newScreenPos = {
-      x: worldPos.x * newScale.x + app.stage.x,
-      y: worldPos.y * newScale.y + app.stage.y,
-    };
-
-    app.stage.x -= newScreenPos.x - x;
-    app.stage.y -= newScreenPos.y - y;
-    app.stage.scale.x = newScale.x;
-    app.stage.scale.y = newScale.y;
-  }
-
-  view?.addEventListener('wheel', (e) => {
-    zoom(e.deltaY, e.offsetX, e.offsetY);
-  });
-
-  document.body.addEventListener(
-    'wheel',
-    (e) => {
-      // const delta = (-1 / 40) * e.wheelDelta;
-
-      // zoom(e.clientX, e.clientY, delta < 0);
-
-      e.preventDefault();
+  return {
+    release: () => {
+      zoom.release();
+      app.destroy();
     },
-    { passive: false }
-  );
-
-  // app.stage.scale.set(1.6, 1.6);
+  };
 };
