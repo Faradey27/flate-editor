@@ -11,6 +11,7 @@ const Canvas = () => {
   useEffect(() => {
     if (canvasRef.current) {
       const editor = initializeEditor({ view: canvasRef.current });
+      editor.run();
 
       return () => {
         editor.release();

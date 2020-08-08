@@ -38,7 +38,7 @@ const zoom = ({ delta, x, y }: ZoomParams, stage: Container) => {
   };
 };
 
-export const enableZoom = (app: Application) => {
+export const initZoomPlugin = (app: Application) => {
   const onGlobalWheel = (e: WheelEvent) => {
     e.preventDefault();
   };
@@ -53,10 +53,11 @@ export const enableZoom = (app: Application) => {
     app.stage.scale.set(scaleX, scaleY);
   };
 
-  document.addEventListener('wheel', onGlobalWheel, { passive: false });
-  app.view.addEventListener('wheel', onZoom);
-
   return {
+    run: () => {
+      document.addEventListener('wheel', onGlobalWheel, { passive: false });
+      app.view.addEventListener('wheel', onZoom);
+    },
     release: () => {
       document.removeEventListener('wheel', onGlobalWheel);
       app.view.removeEventListener('wheel', onZoom);

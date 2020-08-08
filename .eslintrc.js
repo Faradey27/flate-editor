@@ -55,10 +55,11 @@ module.exports = {
         ],
       },
     ],
-    'import/prefer-default-export': ['off'],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
-    'react/jsx-fragments': [1, 'element'],
+    'react/jsx-fragments': ['error', 'element'],
+    'no-plusplus': ['off'],
+    'import/prefer-default-export': ['off'],
     'react/jsx-props-no-spreading': ['off'],
     'react/react-in-jsx-scope': ['off'], // nextjs provide global react
     'no-unused-vars': ['off'], // works badly with typescript
