@@ -1,4 +1,4 @@
-import { Graphics } from 'pixi.js';
+import { Graphics, ObservablePoint } from 'pixi.js';
 
 interface RectProps {
   radius?: number;
@@ -15,8 +15,22 @@ export const createCircle = ({
 }: RectProps = {}) => {
   const circle = new Graphics();
   circle.beginFill(color);
-  circle.drawCircle(left, top, radius);
+  circle.drawCircle(0, 0, radius);
+  circle.position.set(left, top);
   circle.endFill();
 
-  return circle;
+  const originalChangeCb = (circle.position as any).cb;
+
+  return {
+    value: circle,
+    on: (_type: 'positionChange', cb: (position: ObservablePoint) => void) => {
+      (circle.position as any).cb = function override() {
+        originalChangeCb.call(this);
+
+        if (cb) {
+          cb(circle.position);
+        }
+      };
+    },
+  };
 };

@@ -1,5 +1,6 @@
 import { Application, Graphics } from 'pixi.js';
 
+import { createLine } from './components/line';
 import { initCameraPlugin } from './plugins/camera';
 import { enableDragAndDrop } from './plugins/dragAndDrop';
 import { getEditorTheme } from './plugins/editorTheme';
