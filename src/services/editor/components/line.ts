@@ -1,6 +1,6 @@
-import { Graphics } from 'pixi.js';
+import { Component, createShape } from './utils';
 
-interface RectProps {
+interface LineProps {
   startX?: number;
   startY?: number;
   endX?: number;
@@ -14,11 +14,15 @@ export const createLine = ({
   endX = 300,
   endY = 300,
   color = 0x000000,
-}: RectProps = {}) => {
-  const line = new Graphics();
+}: LineProps = {}): Component => {
+  const { shape: line, on } = createShape();
+
   line.lineStyle(2, color);
   line.moveTo(startX, startY);
   line.lineTo(endX, endY);
 
-  return line;
+  return {
+    shape: line,
+    on,
+  };
 };

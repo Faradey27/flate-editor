@@ -1,4 +1,4 @@
-import { Graphics, ObservablePoint } from 'pixi.js';
+import { Component, createShape } from './utils';
 
 interface RectProps {
   width?: number;
@@ -14,8 +14,9 @@ export const createRect = ({
   left = 0,
   top = 0,
   color = 0x000000,
-}: RectProps = {}) => {
-  const rect = new Graphics();
+}: RectProps = {}): Component => {
+  const { shape: rect, on } = createShape();
+
   rect.beginFill(color);
 
   // we always set 0, 0, as initial position immutable
@@ -24,18 +25,8 @@ export const createRect = ({
   rect.position.set(left, top);
   rect.endFill();
 
-  const originalChangeCb = (rect.position as any).cb;
-
   return {
-    value: rect,
-    on: (_type: 'positionChange', cb: (position: ObservablePoint) => void) => {
-      (rect.position as any).cb = function override() {
-        originalChangeCb.call(this);
-
-        if (cb) {
-          cb(rect.position);
-        }
-      };
-    },
+    shape: rect,
+    on,
   };
 };

@@ -1,9 +1,9 @@
 import { Application, Graphics } from 'pixi.js';
 
-import { createLine } from './components/line';
+import { Component } from './components/utils';
+import { getEditorTheme } from './helpers/editorTheme';
 import { initCameraPlugin } from './plugins/camera';
 import { enableDragAndDrop } from './plugins/dragAndDrop';
-import { getEditorTheme } from './plugins/editorTheme';
 import { initZoomPlugin } from './plugins/zoom';
 import { createStateManager } from './state/stateManager';
 
@@ -28,12 +28,15 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
       zoomPlugin.run();
       return methods;
     },
-    addChildren: (children: Graphics[]) => {
-      app.stage.addChild(...children);
+    addChildren: (children: Component[]) => {
+      app.stage.addChild(...children.map((child) => child.shape));
       return methods;
     },
-    makeDraggable: (children: Graphics[]) => {
-      enableDragAndDrop(children, stateManager);
+    makeDraggable: (children: Component[]) => {
+      enableDragAndDrop(
+        children.map((child) => child.shape),
+        stateManager
+      );
       return methods;
     },
     release: () => {
