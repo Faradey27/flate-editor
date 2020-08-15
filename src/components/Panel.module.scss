@@ -1,0 +1,45 @@
+@import '../styles/helpers';
+
+.root {
+  padding-left: spacing(2);
+  padding-right: spacing(2);
+  border-bottom: 1px solid var(--backgroundColor);
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: spacing(1.5) 0;
+  background: none;
+  border: none;
+  width: 100%;
+  outline: none;
+  cursor: pointer;
+}
+
+.summaryTitle {
+  font-size: 12px;
+}
+
+.summuryIcon {
+  fill: var(--iconColor);
+}
+
+.details {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.1s;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, spacing(5));
+  grid-column-gap: spacing(1.5);
+  grid-row-gap: spacing(2);
+  align-items: center;
+}
+
+.details.open {
+  height: auto;
+  transition: height 0.1s;
+  margin-bottom: spacing(1.5);
+}

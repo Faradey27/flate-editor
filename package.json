@@ -23,6 +23,7 @@
     "sass": "^1.26.10"
   },
   "devDependencies": {
+    "@svgr/webpack": "^5.4.0",
     "@testing-library/jest-dom": "^5.11.2",
     "@testing-library/react": "^10.4.8",
     "@types/jest": "^26.0.8",
@@ -47,6 +48,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.2.2",
     "prettier": "^2.0.5",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "url-loader": "^4.1.0"
   }
 }

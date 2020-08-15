@@ -1,0 +1,13 @@
+$primaryColor: #2c2c2c;
+$white: #fff;
+$backgroundColor: #e5e5e5;
+$iconColor: grey;
+$spacing: 8;
+
+:export {
+  primaryColor: $primaryColor;
+  white: $white;
+  backgroundColor: $backgroundColor;
+  iconColor: $iconColor;
+  spacing: $spacing;
+}

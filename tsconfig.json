@@ -24,7 +24,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".eslintrc.js",
-    "jest.config.js"
+    "jest.config.js",
+    "next.config.js"
   ],
   "exclude": ["node_modules", "public"]
 }
