@@ -3,4 +3,8 @@
 .root {
   height: spacing(5);
   background-color: var(--primaryColor);
+
+  display: flex;
+  align-items: center;
+  padding-left: spacing(2);
 }
