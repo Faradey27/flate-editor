@@ -1,8 +1,8 @@
 import { Graphics, InteractionData, InteractionEvent } from 'pixi.js';
 
-import { StateManager } from '../state/stateManager';
+import { StatePlugin } from '../plugins/statePlugin';
 
-const makeDraggable = (shape: Graphics, stateManager: StateManager) => {
+const makeDraggable = (shape: Graphics, stateManager: StatePlugin) => {
   let eventData: InteractionData | null = null;
   const shiftPoint: { x: number; y: number } = { x: 0, y: 0 };
 
@@ -55,7 +55,7 @@ const makeDraggable = (shape: Graphics, stateManager: StateManager) => {
 
 export const enableDragAndDrop = (
   shapes: Graphics[],
-  stateManager: StateManager
+  stateManager: StatePlugin
 ) => {
   const results: { release: () => void }[] = [];
   for (let i = 0; i < shapes.length; i++) {

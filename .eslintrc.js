@@ -23,6 +23,10 @@ module.exports = {
       rules: { 'import/no-extraneous-dependencies': 'off' },
       env: { jest: true },
     },
+    {
+      files: ['src/services/editor/*.ts'],
+      rules: { 'react-hooks/rules-of-hooks': 'off' },
+    },
   ],
   globals: {
     fetch: true,

@@ -1,26 +1,35 @@
-import { Application, Graphics } from 'pixi.js';
+import { Application } from 'pixi.js';
 
-import { Component } from './components/utils';
+import { createShapesFactory } from './components/createShapesFactory';
+import { Component } from './components/types';
 import { getEditorTheme } from './helpers/editorTheme';
 import { initCameraPlugin } from './plugins/camera';
-import { enableDragAndDrop } from './plugins/dragAndDrop';
+import { createPluginsBindings } from './plugins/createPluginsBindings';
+import { initStatePlugin } from './plugins/statePlugin';
 import { initZoomPlugin } from './plugins/zoom';
-import { createStateManager } from './state/stateManager';
 
 export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
-  const stateManager = createStateManager();
-
   const theme = getEditorTheme();
 
   const app = new Application({
-    antialias: true,
+    antialias: false,
     view,
     resizeTo: view,
     backgroundColor: theme.backgroundColor,
+    resolution: global.window.devicePixelRatio,
   });
 
+  const statePlugin = initStatePlugin(app);
   const zoomPlugin = initZoomPlugin(app);
-  const cameraPlugin = initCameraPlugin(app, stateManager);
+  const cameraPlugin = initCameraPlugin(app, statePlugin);
+
+  const { usePlugin } = createPluginsBindings([
+    statePlugin,
+    zoomPlugin,
+    cameraPlugin,
+  ]);
+
+  const shapes = createShapesFactory(usePlugin);
 
   const methods = {
     run: () => {
@@ -28,16 +37,21 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
       zoomPlugin.run();
       return methods;
     },
-    addChildren: (children: Component[]) => {
-      app.stage.addChild(...children.map((child) => child.shape));
-      return methods;
+    render: (components: Component | Component[]) => {
+      if (Array.isArray(components)) {
+        statePlugin.addComponents(components);
+      } else {
+        statePlugin.addComponents([components]);
+      }
     },
-    makeDraggable: (children: Component[]) => {
-      enableDragAndDrop(
-        children.map((child) => child.shape),
-        stateManager
+    shapes,
+    connect: () => {
+      const connector = shapes.connector(
+        {},
+        statePlugin.getComponents()[0],
+        statePlugin.getComponents()[1]
       );
-      return methods;
+      statePlugin.addComponents([connector]);
     },
     release: () => {
       cameraPlugin.release();
@@ -45,6 +59,7 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
       app.destroy();
       return methods;
     },
+    getStage: () => app.stage,
   };
 
   return methods;

@@ -1,5 +1,11 @@
 import { Application, Container } from 'pixi.js';
 
+import { Plugin } from './types.d';
+
+export interface ZoomPlugin extends Plugin {
+  getZoom: () => { x: number; y: number };
+}
+
 const FACTOR_SPEED = 0.2;
 
 const MIN_FACTOR = 1 - FACTOR_SPEED;
@@ -38,7 +44,8 @@ const zoom = ({ delta, x, y }: ZoomParams, stage: Container) => {
   };
 };
 
-export const initZoomPlugin = (app: Application) => {
+export const initZoomPlugin = (app: Application): ZoomPlugin => {
+  const currentZoom = { x: 1, y: 1 };
   const onGlobalWheel = (e: WheelEvent) => {
     e.preventDefault();
   };
@@ -51,16 +58,26 @@ export const initZoomPlugin = (app: Application) => {
 
     app.stage.position.set(x, y);
     app.stage.scale.set(scaleX, scaleY);
+
+    currentZoom.x = scaleX;
+    currentZoom.y = scaleY;
   };
 
-  return {
+  const methods = {
     run: () => {
       document.addEventListener('wheel', onGlobalWheel, { passive: false });
       app.view.addEventListener('wheel', onZoom);
+
+      return methods;
     },
     release: () => {
       document.removeEventListener('wheel', onGlobalWheel);
       app.view.removeEventListener('wheel', onZoom);
     },
+    getName: () => 'zoom' as const,
+
+    getZoom: () => currentZoom,
   };
+
+  return methods;
 };

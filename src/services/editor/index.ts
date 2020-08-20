@@ -1,10 +1,6 @@
-import { Shapes } from 'components/Shape/types';
+import { Shapes } from 'components/Shape/types.d';
 
-import { createCircle } from './components/circle';
-import { createConnector } from './components/connector';
-import { createRect } from './components/rect';
 import { createApp } from './createApp';
-import { enableDragAndDrop } from './plugins/dragAndDrop';
 
 export interface Editor {
   run: () => void;
@@ -17,50 +13,22 @@ export const initializeEditor = ({
 }: {
   view?: HTMLCanvasElement;
 }): Editor => {
-  const rect = createRect({
-    top: 100,
-    left: 100,
-  });
-
-  const circle = createCircle({
-    top: 300,
-    left: 400,
-  });
-
-  const connector = createConnector({}, rect, circle);
-
   const app = createApp({ view });
 
   return {
     run: () => {
       app.run();
 
-      app.addChildren([rect, circle, connector]);
-      app.makeDraggable([rect, circle]);
+      const rect = app.shapes.rect({ left: 100, top: 100 });
+      const circle = app.shapes.circle({ left: 400, top: 300 });
+
+      app.render([rect, circle]);
+      // app.connect();
     },
     dropShape: (item: { id: Shapes }, position: { x: number; y: number }) => {
-      switch (item.id) {
-        case 'rect': {
-          const newRect = createRect({
-            top: position.y,
-            left: position.x,
-          });
-          app.addChildren([newRect]);
-          app.makeDraggable([newRect]);
-          break;
-        }
-        case 'circle': {
-          const newCircle = createCircle({
-            top: position.y,
-            left: position.x,
-          });
-          app.addChildren([newCircle]);
-          app.makeDraggable([newCircle]);
-          break;
-        }
-        default: {
-          // TODO
-        }
+      const shape = app.shapes[item.id];
+      if (shape) {
+        app.render(shape({ left: position.x, top: position.y }));
       }
     },
     release: () => {

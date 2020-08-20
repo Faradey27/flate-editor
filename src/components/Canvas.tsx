@@ -5,7 +5,7 @@ import { Editor, initializeEditor } from 'services/editor';
 
 import classes from './Canvas.module.scss';
 import { dragType } from './Shape';
-import { Shapes } from './Shape/types';
+import { Shapes } from './Shape/types.d';
 
 const Canvas = () => {
   const canvasRef = useRef() as RefObject<HTMLCanvasElement>;

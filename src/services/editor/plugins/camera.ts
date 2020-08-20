@@ -1,11 +1,12 @@
 import { Application } from 'pixi.js';
 
-import { StateManager } from '../state/stateManager';
+import { StatePlugin } from './statePlugin';
+import { Plugin } from './types.d';
 
 export const initCameraPlugin = (
   app: Application,
-  stateManager: StateManager
-) => {
+  stateManager: StatePlugin
+): Plugin => {
   let lastPos: { x: number; y: number } | null = null;
 
   const onDragStart = (e: PointerEvent) => {
@@ -26,12 +27,14 @@ export const initCameraPlugin = (
     }
   };
 
-  return {
+  const methods = {
     run: () => {
       app.view.addEventListener('pointerdown', onDragStart);
       app.view.addEventListener('pointerup', onDragEnd);
       app.view.addEventListener('pointeroutside', onDragEnd);
       app.view.addEventListener('pointermove', onDrag);
+
+      return methods;
     },
     release: () => {
       app.view.removeEventListener('pointerdown', onDragStart);
@@ -39,5 +42,8 @@ export const initCameraPlugin = (
       app.view.removeEventListener('pointeroutside', onDragEnd);
       app.view.removeEventListener('pointermove', onDrag);
     },
+    getName: () => 'camera' as const,
   };
+
+  return methods;
 };

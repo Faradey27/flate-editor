@@ -1,45 +1,50 @@
-import { Component, createShape, EventType } from './utils';
+import { Graphics } from 'pixi.js';
+
+import { ShapeFactory } from './shape';
+import { Component, ComponentEvent, Shapes } from './types.d';
 
 interface ConnectorProps {
   color?: number;
 }
 
-export const createConnector = (
+export const createConnector = ({ shape }: { shape: ShapeFactory }) => (
   { color = 0x000000 }: ConnectorProps,
   component1: Component,
   component2: Component
 ): Component => {
-  const { shape: connector, on } = createShape();
+  const renderConnector = (connector: Graphics) => {
+    connector.lineStyle(2, color);
 
-  connector.lineStyle(2, color);
+    connector.moveTo(component1.shape.position.x, component1.shape.position.y);
+    connector.lineTo(component2.shape.position.x, component1.shape.position.y);
+    connector.moveTo(component2.shape.position.x, component1.shape.position.y);
+    connector.lineTo(component2.shape.position.x, component2.shape.position.y);
+  };
 
-  connector.moveTo(component1.shape.position.x, component1.shape.position.y);
-  connector.lineTo(component2.shape.position.x, component1.shape.position.y);
-  connector.moveTo(component2.shape.position.x, component1.shape.position.y);
-  connector.lineTo(component2.shape.position.x, component2.shape.position.y);
+  const connector = shape({ draggable: true }, renderConnector);
 
-  component1.on(EventType.positionChange, ({ x, y }) => {
-    connector.clear();
-    connector.lineStyle(2, 0x000000);
+  component1.on(ComponentEvent.positionChange, ({ x, y }) => {
+    connector.shape.clear();
+    connector.shape.lineStyle(2, 0x000000);
 
-    connector.moveTo(x, y);
-    connector.lineTo(component2.shape.x, y);
-    connector.moveTo(component2.shape.x, y);
-    connector.lineTo(component2.shape.x, component2.shape.y);
+    connector.shape.moveTo(x, y);
+    connector.shape.lineTo(component2.shape.x, y);
+    connector.shape.moveTo(component2.shape.x, y);
+    connector.shape.lineTo(component2.shape.x, component2.shape.y);
   });
 
-  component2.on(EventType.positionChange, ({ x, y }) => {
-    connector.clear();
-    connector.lineStyle(2, 0x000000);
+  component2.on(ComponentEvent.positionChange, ({ x, y }) => {
+    connector.shape.clear();
+    connector.shape.lineStyle(2, 0x000000);
 
-    connector.moveTo(component1.shape.x, component1.shape.y);
-    connector.lineTo(x, component1.shape.y);
-    connector.moveTo(x, component1.shape.y);
-    connector.lineTo(x, y);
+    connector.shape.moveTo(component1.shape.x, component1.shape.y);
+    connector.shape.lineTo(x, component1.shape.y);
+    connector.shape.moveTo(x, component1.shape.y);
+    connector.shape.lineTo(x, y);
   });
 
   return {
-    shape: connector,
-    on,
+    ...connector,
+    type: Shapes.connector,
   };
 };

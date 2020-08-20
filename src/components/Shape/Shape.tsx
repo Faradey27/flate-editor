@@ -19,7 +19,7 @@ const shapes = {
   triangle: Triangle,
 };
 
-const Shape: React.FC<ShapeProps> = ({ name, children }) => {
+const Shape: React.FC<ShapeProps> = ({ name }) => {
   const [, drag] = useDrag({
     item: { id: name, type: dragType },
   });
