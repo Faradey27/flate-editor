@@ -26,17 +26,20 @@ export const createRect = ({ shape, usePlugin }: ShapeDI) => ({
   let hasSelection = false;
   const zoom = usePlugin('zoom');
 
-  const renderRect = (rect: Graphics, selection: Graphics) => {
-    rect.beginFill(color);
+  const rect = shape({ draggable });
+
+  const renderRect = (graphics: Graphics) => {
+    graphics.beginFill(color);
 
     // we always set 0, 0, as initial position immutable
-    rect.drawRect(0, 0, width, height);
+    graphics.drawRect(0, 0, width, height);
     // then we set desired position
-    rect.position.set(left, top);
-    rect.endFill();
+    graphics.position.set(
+      graphics.position.x || left,
+      graphics.position.y || top
+    );
+    graphics.endFill();
   };
-
-  const rect = shape({ draggable }, renderRect);
 
   const renderSelection = () => {
     if (interactive && hasSelection) {
@@ -72,17 +75,40 @@ export const createRect = ({ shape, usePlugin }: ShapeDI) => ({
     }
   };
 
-  zoom.on(ZoomEvent.change, renderSelection);
+  const reRender = () => {
+    rect.shape.clear();
+    renderRect(rect.shape);
+    renderSelection();
+  };
+
+  if (interactive) {
+    zoom.on(ZoomEvent.change, renderSelection);
+
+    rect.shape.on('pointerover', () => {
+      if (hasSelection) {
+        return;
+      }
+      rect.shape.lineStyle(2 / zoom.getZoom().scaleX, 0x138eff);
+      renderRect(rect.shape);
+    });
+
+    rect.shape.on('pointerout', () => {
+      rect.shape.clear();
+      renderRect(rect.shape);
+    });
+  }
+
+  reRender();
 
   return {
     ...rect,
     showSelection: () => {
       hasSelection = true;
-      renderSelection();
+      reRender();
     },
     hideSelection: () => {
       hasSelection = false;
-      renderSelection();
+      reRender();
     },
     type: Shapes.rect,
   };

@@ -1,3 +1,5 @@
+import { Graphics } from 'pixi.js';
+
 // sadly cb not visible on type, but we need it to be able to track change of position of shape
 declare module 'pixi.js' {
   interface ObservablePoint {
@@ -27,6 +29,5 @@ export interface Component {
   selection: Graphics;
   hideSelection: () => void;
   showSelection: () => void;
-  render: () => void;
   on: (type: ComponentEvent, cb: PositionChangeCB) => void;
 }

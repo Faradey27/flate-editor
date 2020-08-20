@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { enableDragAndDrop } from '../helpers/dragAndDrop';
 import { UsePlugin } from '../plugins/createPluginsBindings';
-import { ZoomEvent } from '../plugins/zoom';
 import { Component, ComponentEvent, PositionChangeCB, Shapes } from './types.d';
 
 interface ShapeProps {
@@ -32,10 +31,7 @@ const createListeners = (shape: Graphics) => {
   };
 };
 
-export type ShapeFactory = (
-  { draggable }: ShapeProps,
-  render: (shape: Graphics, selection: Graphics) => void
-) => Component;
+export type ShapeFactory = ({ draggable }: ShapeProps) => Component;
 
 export type ShapeFactoryCreator = (usePlugin: UsePlugin) => ShapeFactory;
 
@@ -44,13 +40,14 @@ export interface ShapeDI {
   usePlugin: UsePlugin;
 }
 
-const defaultProps = { draggable: true };
+const defaultProps = { draggable: true, interactive: true };
 
-export const createShape: ShapeFactoryCreator = (usePlugin) => (
-  { draggable } = defaultProps,
-  render
-) => {
+export const createShape: ShapeFactoryCreator = (usePlugin) => ({
+  draggable,
+} = defaultProps) => {
+  const hasSelection = false;
   const stateManager = usePlugin('state');
+  const zoom = usePlugin('zoom');
 
   const id = uuidv4();
   const shape = new Graphics();
@@ -82,7 +79,6 @@ export const createShape: ShapeFactoryCreator = (usePlugin) => (
     hideSelection: () => {
       // empty
     },
-    render: () => render(shape, selection),
     on: (type: ComponentEvent, cb: PositionChangeCB) => {
       listeners[type].push(cb);
     },

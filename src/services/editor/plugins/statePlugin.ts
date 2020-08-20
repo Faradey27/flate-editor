@@ -51,7 +51,6 @@ export const initStatePlugin = (app: Application): StatePlugin => {
       components.push(...newComponents);
 
       app.stage.addChild(...newComponents.map((component) => component.shape));
-      newComponents.forEach((component) => component?.render());
     },
     getComponents: () => components,
   };

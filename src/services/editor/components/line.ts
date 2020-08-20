@@ -18,13 +18,15 @@ export const createLine = ({ shape }: ShapeDI) => ({
   endY = 300,
   color = 0x000000,
 }: LineProps = {}): Component => {
-  const renderLine = (line: Graphics) => {
-    line.lineStyle(2, color);
-    line.moveTo(startX, startY);
-    line.lineTo(endX, endY);
+  const line = shape({ draggable: true });
+
+  const renderLine = () => {
+    line.shape.lineStyle(2, color);
+    line.shape.moveTo(startX, startY);
+    line.shape.lineTo(endX, endY);
   };
 
-  const line = shape({ draggable: true }, renderLine);
+  renderLine();
 
   return {
     ...line,

@@ -12,16 +12,28 @@ export const createConnector = ({ shape }: ShapeDI) => (
   component1: Component,
   component2: Component
 ): Component => {
-  const renderConnector = (connector: Graphics) => {
-    connector.lineStyle(2, color);
+  const connector = shape({ draggable: true });
 
-    connector.moveTo(component1.shape.position.x, component1.shape.position.y);
-    connector.lineTo(component2.shape.position.x, component1.shape.position.y);
-    connector.moveTo(component2.shape.position.x, component1.shape.position.y);
-    connector.lineTo(component2.shape.position.x, component2.shape.position.y);
+  const renderConnector = () => {
+    connector.shape.lineStyle(2, color);
+
+    connector.shape.moveTo(
+      component1.shape.position.x,
+      component1.shape.position.y
+    );
+    connector.shape.lineTo(
+      component2.shape.position.x,
+      component1.shape.position.y
+    );
+    connector.shape.moveTo(
+      component2.shape.position.x,
+      component1.shape.position.y
+    );
+    connector.shape.lineTo(
+      component2.shape.position.x,
+      component2.shape.position.y
+    );
   };
-
-  const connector = shape({ draggable: true }, renderConnector);
 
   component1.on(ComponentEvent.positionChange, ({ x, y }) => {
     connector.shape.clear();

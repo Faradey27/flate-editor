@@ -21,21 +21,57 @@ export const createCircle = ({ shape, usePlugin }: ShapeDI) => ({
 }: CircleProps = {}): Component => {
   let hasSelection = false;
   const zoom = usePlugin('zoom');
+  const circle = shape({ draggable: true });
 
-  const renderCircle = (circle: Graphics) => {
-    circle.beginFill(color);
-    circle.drawCircle(0, 0, radius);
-    circle.position.set(left, top);
-    circle.endFill();
+  const renderCircle = (graphics: Graphics) => {
+    graphics.beginFill(color);
+    graphics.drawCircle(0, 0, radius);
+    graphics.position.set(
+      graphics.position.x || left,
+      graphics.position.y || top
+    );
+    graphics.endFill();
   };
-  const circle = shape({ draggable: true }, renderCircle);
 
   const renderSelection = () => {
     if (interactive && hasSelection) {
-      const scale = zoom.getZoom().scaleX;
+      const { scaleX, scaleY, x } = zoom.getZoom();
+
       circle.selection.clear();
-      circle.selection.lineStyle(1 / scale, 0x138eff);
-      circle.selection.drawCircle(0, 0, radius);
+      circle.selection.lineStyle(1 / scaleX, 0x138eff);
+      circle.selection.drawRect(
+        -circle.shape.width / 2,
+        -circle.shape.height / 2,
+        circle.shape.width,
+        circle.shape.height
+      );
+
+      circle.selection.beginFill(0xffffff);
+
+      circle.selection.drawRect(
+        -circle.shape.width / 2 - 1 / scaleX,
+        -circle.shape.height / 2 - 1 / scaleY,
+        4 / scaleX,
+        4 / scaleY
+      );
+      circle.selection.drawRect(
+        circle.shape.width / 2 - 3 / scaleX,
+        -circle.shape.height / 2 - 1 / scaleY,
+        4 / scaleX,
+        4 / scaleY
+      );
+      circle.selection.drawRect(
+        -circle.shape.width / 2 + 1 / scaleX,
+        circle.shape.height / 2 - 3 / scaleY,
+        4 / scaleX,
+        4 / scaleY
+      );
+      circle.selection.drawRect(
+        circle.shape.width / 2 - 4 / scaleX,
+        circle.shape.height / 2 - 5 / scaleY,
+        4 / scaleX,
+        4 / scaleY
+      );
     } else {
       circle.selection.clear();
     }
@@ -43,15 +79,40 @@ export const createCircle = ({ shape, usePlugin }: ShapeDI) => ({
 
   zoom.on(ZoomEvent.change, renderSelection);
 
+  const reRender = () => {
+    circle.shape.clear();
+    renderCircle(circle.shape);
+    renderSelection();
+  };
+
+  if (interactive) {
+    zoom.on(ZoomEvent.change, renderSelection);
+
+    circle.shape.on('pointerover', () => {
+      if (hasSelection) {
+        return;
+      }
+      circle.shape.lineStyle(2 / zoom.getZoom().scaleX, 0x138eff);
+      renderCircle(circle.shape);
+    });
+
+    circle.shape.on('pointerout', () => {
+      circle.shape.clear();
+      renderCircle(circle.shape);
+    });
+  }
+
+  renderCircle(circle.shape);
+
   return {
     ...circle,
     showSelection: () => {
       hasSelection = true;
-      renderSelection();
+      reRender();
     },
     hideSelection: () => {
       hasSelection = false;
-      renderSelection();
+      reRender();
     },
     type: Shapes.circle,
   };
