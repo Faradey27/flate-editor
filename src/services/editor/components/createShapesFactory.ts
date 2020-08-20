@@ -8,10 +8,10 @@ import { createShape } from './shape';
 export const createShapesFactory = (usePlugin: UsePlugin) => {
   const shape = createShape(usePlugin);
 
-  const rect = createRect({ shape });
-  const circle = createCircle({ shape });
-  const line = createLine({ shape });
-  const connector = createConnector({ shape });
+  const rect = createRect({ shape, usePlugin });
+  const circle = createCircle({ shape, usePlugin });
+  const line = createLine({ shape, usePlugin });
+  const connector = createConnector({ shape, usePlugin });
 
   return { rect, circle, line, connector, triangle: rect };
 };

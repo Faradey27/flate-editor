@@ -1,6 +1,6 @@
 import { Graphics } from 'pixi.js';
 
-import { ShapeFactory } from './shape';
+import { ShapeDI } from './shape';
 import { Component, Shapes } from './types.d';
 
 interface LineProps {
@@ -11,7 +11,7 @@ interface LineProps {
   color?: number;
 }
 
-export const createLine = ({ shape }: { shape: ShapeFactory }) => ({
+export const createLine = ({ shape }: ShapeDI) => ({
   startX = 0,
   startY = 0,
   endX = 300,

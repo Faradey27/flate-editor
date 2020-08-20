@@ -40,12 +40,12 @@ export const initStatePlugin = (app: Application): StatePlugin => {
 
       selectedComponentId = id;
 
-      if (!prevSelectedComponent || !nextSelectedComponent) {
-        return;
+      if (prevSelectedComponent) {
+        prevSelectedComponent.hideSelection();
       }
-
-      prevSelectedComponent.hideSelection();
-      nextSelectedComponent.showSelection();
+      if (nextSelectedComponent) {
+        nextSelectedComponent.showSelection();
+      }
     },
     addComponents: (newComponents: Component[]) => {
       components.push(...newComponents);

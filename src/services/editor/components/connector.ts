@@ -1,13 +1,13 @@
 import { Graphics } from 'pixi.js';
 
-import { ShapeFactory } from './shape';
+import { ShapeDI } from './shape';
 import { Component, ComponentEvent, Shapes } from './types.d';
 
 interface ConnectorProps {
   color?: number;
 }
 
-export const createConnector = ({ shape }: { shape: ShapeFactory }) => (
+export const createConnector = ({ shape }: ShapeDI) => (
   { color = 0x000000 }: ConnectorProps,
   component1: Component,
   component2: Component

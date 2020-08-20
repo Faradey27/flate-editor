@@ -19,6 +19,9 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
     resolution: global.window.devicePixelRatio,
   });
 
+  // @ts-ignore
+  app.ticker.maxFPS = 60;
+
   const statePlugin = initStatePlugin(app);
   const zoomPlugin = initZoomPlugin(app);
   const cameraPlugin = initCameraPlugin(app, statePlugin);
