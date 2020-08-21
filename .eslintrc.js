@@ -24,7 +24,7 @@ module.exports = {
       env: { jest: true },
     },
     {
-      files: ['src/services/editor/*.ts'],
+      files: ['src/services/editor/*.ts', 'src/services/editor/**/*.ts'],
       rules: { 'react-hooks/rules-of-hooks': 'off' },
     },
   ],

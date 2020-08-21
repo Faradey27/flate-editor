@@ -14,7 +14,7 @@ export interface RectProps {
   interactive?: boolean;
 }
 
-export const createRect = ({ shape, usePlugin }: ShapeDI) => ({
+export const createRect = ({ shape, usePlugin, renderSelection }: ShapeDI) => ({
   width = 100,
   height = 100,
   left = 0,
@@ -41,48 +41,30 @@ export const createRect = ({ shape, usePlugin }: ShapeDI) => ({
     graphics.endFill();
   };
 
-  const renderSelection = () => {
-    if (interactive && hasSelection) {
-      const { scaleX, scaleY, x } = zoom.getZoom();
-
-      rect.selection.clear();
-      rect.selection.lineStyle(1 / scaleX, 0x138eff);
-      rect.selection.drawRect(0, 0, rect.shape.width, rect.shape.height);
-
-      rect.selection.beginFill(0xffffff);
-
-      rect.selection.drawRect(-2 / scaleX, -2 / scaleY, 4 / scaleX, 4 / scaleY);
-      rect.selection.drawRect(
-        rect.shape.width - 5 / scaleX,
-        -2 / scaleY,
-        4 / scaleX,
-        4 / scaleY
-      );
-      rect.selection.drawRect(
-        rect.shape.width - 7 / scaleX,
-        rect.shape.height - 5 / scaleY,
-        4 / scaleX,
-        4 / scaleY
-      );
-      rect.selection.drawRect(
-        -2 / scaleX,
-        rect.shape.height - 7 / scaleY,
-        4 / scaleX,
-        4 / scaleY
-      );
-    } else {
-      rect.selection.clear();
-    }
-  };
-
   const reRender = () => {
     rect.shape.clear();
     renderRect(rect.shape);
-    renderSelection();
+    renderSelection({
+      selection: rect.selection,
+      width: rect.shape.width,
+      height: rect.shape.height,
+      hasSelection,
+      interactive,
+    });
   };
 
   if (interactive) {
-    zoom.on(ZoomEvent.change, renderSelection);
+    zoom.on(ZoomEvent.change, () =>
+      renderSelection({
+        x: -rect.shape.width / 2,
+        y: -rect.shape.height / 2,
+        selection: rect.selection,
+        width: rect.shape.width,
+        height: rect.shape.height,
+        hasSelection,
+        interactive,
+      })
+    );
 
     rect.shape.on('pointerover', () => {
       if (hasSelection) {

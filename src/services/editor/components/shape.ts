@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { enableDragAndDrop } from '../helpers/dragAndDrop';
 import { UsePlugin } from '../plugins/createPluginsBindings';
+import { RenderSelection } from './createSelectionRenderer';
 import { Component, ComponentEvent, PositionChangeCB, Shapes } from './types.d';
 
 interface ShapeProps {
@@ -38,6 +39,7 @@ export type ShapeFactoryCreator = (usePlugin: UsePlugin) => ShapeFactory;
 export interface ShapeDI {
   shape: ShapeFactory;
   usePlugin: UsePlugin;
+  renderSelection: (params: RenderSelection) => void;
 }
 
 const defaultProps = { draggable: true, interactive: true };

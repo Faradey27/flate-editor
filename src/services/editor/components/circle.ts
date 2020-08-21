@@ -12,7 +12,11 @@ interface CircleProps {
   interactive?: boolean;
 }
 
-export const createCircle = ({ shape, usePlugin }: ShapeDI) => ({
+export const createCircle = ({
+  shape,
+  usePlugin,
+  renderSelection,
+}: ShapeDI) => ({
   radius = 50,
   left = 0,
   top = 0,
@@ -33,60 +37,30 @@ export const createCircle = ({ shape, usePlugin }: ShapeDI) => ({
     graphics.endFill();
   };
 
-  const renderSelection = () => {
-    if (interactive && hasSelection) {
-      const { scaleX, scaleY, x } = zoom.getZoom();
-
-      circle.selection.clear();
-      circle.selection.lineStyle(1 / scaleX, 0x138eff);
-      circle.selection.drawRect(
-        -circle.shape.width / 2,
-        -circle.shape.height / 2,
-        circle.shape.width,
-        circle.shape.height
-      );
-
-      circle.selection.beginFill(0xffffff);
-
-      circle.selection.drawRect(
-        -circle.shape.width / 2 - 1 / scaleX,
-        -circle.shape.height / 2 - 1 / scaleY,
-        4 / scaleX,
-        4 / scaleY
-      );
-      circle.selection.drawRect(
-        circle.shape.width / 2 - 3 / scaleX,
-        -circle.shape.height / 2 - 1 / scaleY,
-        4 / scaleX,
-        4 / scaleY
-      );
-      circle.selection.drawRect(
-        -circle.shape.width / 2 + 1 / scaleX,
-        circle.shape.height / 2 - 3 / scaleY,
-        4 / scaleX,
-        4 / scaleY
-      );
-      circle.selection.drawRect(
-        circle.shape.width / 2 - 4 / scaleX,
-        circle.shape.height / 2 - 5 / scaleY,
-        4 / scaleX,
-        4 / scaleY
-      );
-    } else {
-      circle.selection.clear();
-    }
-  };
-
-  zoom.on(ZoomEvent.change, renderSelection);
-
   const reRender = () => {
     circle.shape.clear();
     renderCircle(circle.shape);
-    renderSelection();
+    renderSelection({
+      x: -circle.shape.width / 2,
+      y: -circle.shape.height / 2,
+      selection: circle.selection,
+      width: circle.shape.width,
+      height: circle.shape.height,
+      hasSelection,
+      interactive,
+    });
   };
 
   if (interactive) {
-    zoom.on(ZoomEvent.change, renderSelection);
+    zoom.on(ZoomEvent.change, () =>
+      renderSelection({
+        selection: circle.selection,
+        width: circle.shape.width,
+        height: circle.shape.height,
+        hasSelection,
+        interactive,
+      })
+    );
 
     circle.shape.on('pointerover', () => {
       if (hasSelection) {
