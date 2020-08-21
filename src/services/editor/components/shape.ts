@@ -8,6 +8,7 @@ import { Component, ComponentEvent, PositionChangeCB, Shapes } from './types.d';
 
 interface ShapeProps {
   draggable?: boolean;
+  interactive?: boolean;
 }
 
 const createListeners = (shape: Graphics) => {
@@ -32,7 +33,10 @@ const createListeners = (shape: Graphics) => {
   };
 };
 
-export type ShapeFactory = ({ draggable }: ShapeProps) => Component;
+export type ShapeFactory = ({
+  draggable,
+  interactive,
+}: ShapeProps) => Component;
 
 export type ShapeFactoryCreator = (usePlugin: UsePlugin) => ShapeFactory;
 
@@ -46,10 +50,9 @@ const defaultProps = { draggable: true, interactive: true };
 
 export const createShape: ShapeFactoryCreator = (usePlugin) => ({
   draggable,
+  interactive,
 } = defaultProps) => {
-  const hasSelection = false;
   const stateManager = usePlugin('state');
-  const zoom = usePlugin('zoom');
 
   const id = uuidv4();
   const shape = new Graphics();
@@ -59,8 +62,8 @@ export const createShape: ShapeFactoryCreator = (usePlugin) => ({
 
   shape.addChild(selection);
   shape.position.cb = positionCb;
-  shape.interactive = true;
-  shape.buttonMode = true;
+  shape.interactive = Boolean(interactive);
+  shape.buttonMode = Boolean(interactive);
 
   if (draggable) {
     enableDragAndDrop([shape], stateManager);
