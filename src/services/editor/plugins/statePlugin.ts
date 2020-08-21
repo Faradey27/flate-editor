@@ -10,6 +10,7 @@ export interface StatePlugin extends Plugin {
   addComponents: (components: Component[]) => void;
   getComponents: () => Component[];
   setSelectedComponentId: (id: string) => void;
+  getSelectedComponent: () => Component | null;
 }
 
 export const initStatePlugin = (app: Application): StatePlugin => {
@@ -46,6 +47,16 @@ export const initStatePlugin = (app: Application): StatePlugin => {
       if (nextSelectedComponent) {
         nextSelectedComponent.showSelection();
       }
+    },
+    getSelectedComponent: () => {
+      if (!selectedComponentId) {
+        return null;
+      }
+
+      return (
+        components.find((component) => component.id === selectedComponentId) ||
+        null
+      );
     },
     addComponents: (newComponents: Component[]) => {
       components.push(...newComponents);

@@ -46,25 +46,15 @@ export const createRect = ({ shape, usePlugin, renderSelection }: ShapeDI) => ({
     renderRect(rect.shape);
     renderSelection({
       selection: rect.selection,
-      width: rect.shape.width,
-      height: rect.shape.height,
+      width,
+      height,
       hasSelection,
       interactive,
     });
   };
 
   if (interactive) {
-    zoom.on(ZoomEvent.change, () =>
-      renderSelection({
-        x: -rect.shape.width / 2,
-        y: -rect.shape.height / 2,
-        selection: rect.selection,
-        width: rect.shape.width,
-        height: rect.shape.height,
-        hasSelection,
-        interactive,
-      })
-    );
+    zoom.on(ZoomEvent.change, reRender);
 
     rect.shape.on('pointerover', () => {
       if (hasSelection) {

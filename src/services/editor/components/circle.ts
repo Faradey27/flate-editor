@@ -41,26 +41,18 @@ export const createCircle = ({
     circle.shape.clear();
     renderCircle(circle.shape);
     renderSelection({
-      x: -circle.shape.width / 2,
-      y: -circle.shape.height / 2,
+      x: -radius,
+      y: -radius,
       selection: circle.selection,
-      width: circle.shape.width,
-      height: circle.shape.height,
+      width: radius * 2,
+      height: radius * 2,
       hasSelection,
       interactive,
     });
   };
 
   if (interactive) {
-    zoom.on(ZoomEvent.change, () =>
-      renderSelection({
-        selection: circle.selection,
-        width: circle.shape.width,
-        height: circle.shape.height,
-        hasSelection,
-        interactive,
-      })
-    );
+    zoom.on(ZoomEvent.change, reRender);
 
     circle.shape.on('pointerover', () => {
       if (hasSelection) {

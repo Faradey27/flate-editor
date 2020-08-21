@@ -3,4 +3,21 @@
 .root {
   height: 100%;
   background-color: var(--white);
+  font-size: 12px;
+}
+
+.properties {
+  display: grid;
+  grid-row-gap: spacing(1);
+}
+
+.propertiesRow {
+  display: grid;
+  grid-column-gap: spacing(4);
+  grid-template-columns: 1fr 1fr;
+}
+
+.label {
+  color: var(--iconColor);
+  margin-right: spacing(1.5);
 }

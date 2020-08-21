@@ -1,11 +1,13 @@
 import { Shapes } from 'components/Shape/types.d';
 
+import { Component } from './components/types';
 import { createApp } from './createApp';
 
 export interface Editor {
   run: () => void;
   release: () => void;
   dropShape: (item: { id: Shapes }, position: { x: number; y: number }) => void;
+  getSelectedComponent: () => Component | null;
 }
 
 export const initializeEditor = ({
@@ -35,6 +37,7 @@ export const initializeEditor = ({
       app.render([canvas, rect, circle]);
       // app.connect();
     },
+    getSelectedComponent: app.stateManager.getSelectedComponent,
     dropShape: (item: { id: Shapes }, position: { x: number; y: number }) => {
       const shape = app.shapes[item.id];
       if (shape) {

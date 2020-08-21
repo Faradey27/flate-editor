@@ -34,6 +34,8 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
 
   const shapes = createShapesFactory(usePlugin);
 
+  app.stage.interactive = true;
+
   const methods = {
     run: () => {
       cameraPlugin.run();
@@ -48,6 +50,7 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
       }
     },
     shapes,
+    stateManager: statePlugin,
     connect: () => {
       const connector = shapes.connector(
         {},
