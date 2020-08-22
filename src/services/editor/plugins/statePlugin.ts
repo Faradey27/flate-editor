@@ -1,6 +1,6 @@
 import { Application } from 'pixi.js';
 
-import { Component } from '../components/types';
+import { Component, ComponentEvent } from '../components/types.d';
 import { Plugin } from './types.d';
 
 export interface StatePlugin extends Plugin {
@@ -10,13 +10,40 @@ export interface StatePlugin extends Plugin {
   addComponents: (components: Component[]) => void;
   getComponents: () => Component[];
   setSelectedComponentId: (id: string) => void;
-  getSelectedComponent: () => Component | null;
+  on: (
+    type: 'selectedComponentChange',
+    cb: (component: Component | null) => void
+  ) => void;
 }
+
+export type SelectedComponentChangeCB = (component: Component | null) => void;
+
+const createListeners = () => {
+  const listeners: {
+    [key in 'selectedComponentChange']: SelectedComponentChangeCB[];
+  } = {
+    selectedComponentChange: [],
+  };
+
+  function selectedComponentChangeCb(component: Component | null) {
+    const cbs = listeners.selectedComponentChange;
+    for (let i = 0; i < cbs.length; i++) {
+      cbs[i](component);
+    }
+  }
+
+  return {
+    selectedComponentChangeCb,
+    listeners,
+  };
+};
 
 export const initStatePlugin = (app: Application): StatePlugin => {
   let isDrag = false;
   let selectedComponentId: string = '';
   const components: Component[] = [];
+
+  const { listeners, selectedComponentChangeCb } = createListeners();
 
   const methods = {
     run: () => methods,
@@ -41,11 +68,17 @@ export const initStatePlugin = (app: Application): StatePlugin => {
 
       selectedComponentId = id;
 
+      const onChange = () =>
+        selectedComponentChangeCb(nextSelectedComponent || null);
+
       if (prevSelectedComponent) {
         prevSelectedComponent.hideSelection();
+        prevSelectedComponent.off(ComponentEvent.positionChange, onChange);
       }
       if (nextSelectedComponent) {
         nextSelectedComponent.showSelection();
+        selectedComponentChangeCb(nextSelectedComponent);
+        nextSelectedComponent.on(ComponentEvent.positionChange, onChange);
       }
     },
     getSelectedComponent: () => {
@@ -64,6 +97,14 @@ export const initStatePlugin = (app: Application): StatePlugin => {
       app.stage.addChild(...newComponents.map((component) => component.shape));
     },
     getComponents: () => components,
+    on: (
+      type: 'selectedComponentChange',
+      cb: (component: Component | null) => void
+    ) => {
+      if (type === 'selectedComponentChange') {
+        listeners.selectedComponentChange.push(cb);
+      }
+    },
   };
 
   return methods;

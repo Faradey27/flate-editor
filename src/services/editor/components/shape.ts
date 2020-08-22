@@ -87,5 +87,8 @@ export const createShape: ShapeFactoryCreator = (usePlugin) => ({
     on: (type: ComponentEvent, cb: PositionChangeCB) => {
       listeners[type].push(cb);
     },
+    off: (type: ComponentEvent, cb: PositionChangeCB) => {
+      listeners[type] = listeners[type].filter((prevCb) => prevCb !== cb);
+    },
   };
 };

@@ -1,4 +1,8 @@
+import { useState } from 'react';
 import dynamic from 'next/dynamic';
+
+import { Editor } from 'services/editor';
+import { EditorContextProvider } from 'services/editor/reactBindings';
 
 import CanvasPlaceholder from 'components/CanvasPlaceholder';
 import ComponentsPanel from 'components/ComponentsPanel';
@@ -13,13 +17,17 @@ const DynamicComponentWithNoSSR = dynamic(
 );
 
 const Home = () => {
+  const [editor, setEditor] = useState<Editor | null>(null);
+
   return (
     <main data-testid="app-root" className={classes.root}>
       <Header />
       <div className={classes.content}>
-        <ComponentsPanel />
-        <DynamicComponentWithNoSSR />
-        <PropertiesPanel />
+        <EditorContextProvider value={editor}>
+          <ComponentsPanel />
+          <DynamicComponentWithNoSSR onEditorReady={setEditor} />
+          <PropertiesPanel />
+        </EditorContextProvider>
       </div>
     </main>
   );

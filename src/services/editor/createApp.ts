@@ -8,6 +8,28 @@ import { createPluginsBindings } from './plugins/createPluginsBindings';
 import { initStatePlugin } from './plugins/statePlugin';
 import { initZoomPlugin } from './plugins/zoom';
 
+export type SelectedComponentChangeCB = (component: Component | null) => void;
+
+const createListeners = () => {
+  const listeners: {
+    [key in 'selectedComponentChange']: SelectedComponentChangeCB[];
+  } = {
+    selectedComponentChange: [],
+  };
+
+  function selectedComponentChangeCb(component: Component | null) {
+    const cbs = listeners.selectedComponentChange;
+    for (let i = 0; i < cbs.length; i++) {
+      cbs[i](component);
+    }
+  }
+
+  return {
+    selectedComponentChangeCb,
+    listeners,
+  };
+};
+
 export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
   const theme = getEditorTheme();
 
@@ -36,6 +58,10 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
 
   app.stage.interactive = true;
 
+  const { listeners, selectedComponentChangeCb } = createListeners();
+
+  statePlugin.on('selectedComponentChange', selectedComponentChangeCb);
+
   const methods = {
     run: () => {
       cameraPlugin.run();
@@ -50,7 +76,14 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
       }
     },
     shapes,
-    stateManager: statePlugin,
+    on: (
+      type: 'selectedComponentChange',
+      cb: (component: Component | null) => void
+    ) => {
+      if (type === 'selectedComponentChange') {
+        listeners.selectedComponentChange.push(cb);
+      }
+    },
     connect: () => {
       const connector = shapes.connector(
         {},

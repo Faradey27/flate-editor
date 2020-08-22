@@ -30,4 +30,5 @@ export interface Component {
   hideSelection: () => void;
   showSelection: () => void;
   on: (type: ComponentEvent, cb: PositionChangeCB) => void;
+  off: (type: ComponentEvent, cb: PositionChangeCB) => void;
 }

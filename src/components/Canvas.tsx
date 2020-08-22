@@ -7,7 +7,11 @@ import classes from './Canvas.module.scss';
 import { dragType } from './Shape';
 import { Shapes } from './Shape/types.d';
 
-const Canvas = () => {
+interface CanvasProps {
+  onEditorReady: (editor: Editor) => void;
+}
+
+const Canvas: React.FC<CanvasProps> = ({ onEditorReady }) => {
   const canvasRef = useRef() as RefObject<HTMLCanvasElement>;
   const editorRef = useRef() as RefObject<Editor>;
 
@@ -38,13 +42,15 @@ const Canvas = () => {
 
       (editorRef as any).current = editor;
 
+      onEditorReady(editor);
+
       return () => {
         editor.release();
       };
     }
 
     return () => {};
-  }, []);
+  }, [onEditorReady]);
 
   return (
     <div ref={drop}>

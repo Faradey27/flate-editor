@@ -7,7 +7,10 @@ export interface Editor {
   run: () => void;
   release: () => void;
   dropShape: (item: { id: Shapes }, position: { x: number; y: number }) => void;
-  getSelectedComponent: () => Component | null;
+  on: (
+    type: 'selectedComponentChange',
+    cb: (component: Component | null) => void
+  ) => void;
 }
 
 export const initializeEditor = ({
@@ -37,7 +40,7 @@ export const initializeEditor = ({
       app.render([canvas, rect, circle]);
       // app.connect();
     },
-    getSelectedComponent: app.stateManager.getSelectedComponent,
+    on: app.on,
     dropShape: (item: { id: Shapes }, position: { x: number; y: number }) => {
       const shape = app.shapes[item.id];
       if (shape) {
