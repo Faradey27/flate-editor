@@ -10,6 +10,7 @@ export interface StatePlugin extends Plugin {
   addComponents: (components: Component[]) => void;
   getComponents: () => Component[];
   setSelectedComponentId: (id: string) => void;
+  getSelectedComponent: () => Component | null;
   on: (
     type: 'selectedComponentChange',
     cb: (component: Component | null) => void

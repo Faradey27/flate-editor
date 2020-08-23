@@ -35,6 +35,7 @@ module.exports = {
     document: true,
   },
   rules: {
+    'jsx-a11y/label-has-associated-control': [2, {}],
     'prettier/prettier': ['error'],
     'react/forbid-prop-types': ['error'],
     'react/jsx-filename-extension': ['error', { extensions: ['.js', '.tsx'] }],

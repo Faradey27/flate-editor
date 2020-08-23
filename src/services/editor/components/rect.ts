@@ -25,6 +25,7 @@ export const createRect = ({ shape, usePlugin, renderSelection }: ShapeDI) => ({
 }: RectProps = {}): Component => {
   let hasSelection = false;
   const zoom = usePlugin('zoom');
+  const stateManager = usePlugin('state');
 
   const rect = shape({ draggable });
 
@@ -57,7 +58,7 @@ export const createRect = ({ shape, usePlugin, renderSelection }: ShapeDI) => ({
     zoom.on(ZoomEvent.change, reRender);
 
     rect.shape.on('pointerover', () => {
-      if (hasSelection) {
+      if (hasSelection || stateManager.isDragging()) {
         return;
       }
       rect.shape.lineStyle(2 / zoom.getZoom().scaleX, 0x138eff);

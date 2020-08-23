@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { defineMessage, useIntl } from 'react-intl';
 
 import { useEditor } from 'services/editor/reactBindings';
@@ -42,38 +42,152 @@ const useSelectedComponent = () => {
     }
   });
 
-  return { x, y, width, height };
+  const applyNewX = useCallback(
+    (newX) => {
+      const selectedComponent = editor?.getSelectedComponent();
+      if (selectedComponent) {
+        selectedComponent.shape.position.set(newX, y);
+        setX(newX);
+      }
+    },
+    [editor, y]
+  );
+
+  const applyNewY = useCallback(
+    (newY) => {
+      const selectedComponent = editor?.getSelectedComponent();
+      if (selectedComponent) {
+        selectedComponent.shape.position.set(x, newY);
+        setY(newY);
+      }
+    },
+    [editor, x]
+  );
+
+  const applyNewWidth = useCallback(
+    (newWidth) => {
+      const selectedComponent = editor?.getSelectedComponent();
+      if (selectedComponent) {
+        selectedComponent.shape.width = newWidth;
+        setWidth(newWidth);
+      }
+    },
+    [editor]
+  );
+
+  const applyNewHeight = useCallback(
+    (newHeight) => {
+      const selectedComponent = editor?.getSelectedComponent();
+      if (selectedComponent) {
+        selectedComponent.shape.height = newHeight;
+        setHeight(newHeight);
+      }
+    },
+    [editor]
+  );
+
+  return {
+    x,
+    y,
+    width,
+    height,
+    setX: applyNewX,
+    setY: applyNewY,
+    setWidth: applyNewWidth,
+    setHeight: applyNewHeight,
+  };
 };
 
 interface PropertiesPanelProps {}
 
 const PropertiesPanel: React.FC<PropertiesPanelProps> = () => {
   const intl = useIntl();
-  const { x, y, width, height } = useSelectedComponent();
+  const {
+    x,
+    y,
+    width,
+    height,
+    setX,
+    setY,
+    setWidth,
+    setHeight,
+  } = useSelectedComponent();
+
+  const handleChangeY = useCallback(
+    (e) => {
+      const { value } = e.target;
+      setY(value);
+    },
+    [setY]
+  );
+
+  const handleChangeX = useCallback(
+    (e) => {
+      const { value } = e.target;
+      setX(value);
+    },
+    [setX]
+  );
+
+  const handleChangeWidth = useCallback(
+    (e) => {
+      const { value } = e.target;
+      setWidth(value);
+    },
+    [setWidth]
+  );
+
+  const handleChangeHeight = useCallback(
+    (e) => {
+      const { value } = e.target;
+      setHeight(value);
+    },
+    [setHeight]
+  );
 
   return (
     <div className={classes.root}>
       <Panel title={intl.formatMessage(messages.frame)} defaultOpen>
         <div className={classes.properties}>
           <div className={classes.propertiesRow}>
-            <div>
+            <label className={classes.propertiesCell}>
               <span className={classes.label}>Y</span>
-              <span className={classes.value}>{y}</span>
-            </div>
-            <div>
+              <input
+                type="number"
+                className={classes.value}
+                value={y}
+                onChange={handleChangeY}
+              />
+            </label>
+            <label className={classes.propertiesCell}>
               <span className={classes.label}>X</span>
-              <span className={classes.value}>{x}</span>
-            </div>
+              <input
+                type="number"
+                className={classes.value}
+                value={x}
+                onChange={handleChangeX}
+              />
+            </label>
           </div>
           <div className={classes.propertiesRow}>
-            <div>
+            <label className={classes.propertiesCell}>
               <span className={classes.label}>W</span>
-              <span className={classes.value}>{width}</span>
-            </div>
-            <div>
+              <input
+                type="number"
+                className={classes.value}
+                value={width}
+                onChange={handleChangeWidth}
+              />
+            </label>
+            <label className={classes.propertiesCell}>
               <span className={classes.label}>H</span>
-              <span className={classes.value}>{height}</span>
-            </div>
+              <input
+                type="number"
+                className={classes.value}
+                value={height}
+                onChange={handleChangeHeight}
+              />
+            </label>
           </div>
         </div>
       </Panel>

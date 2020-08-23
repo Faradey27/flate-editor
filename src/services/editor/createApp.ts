@@ -84,6 +84,7 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
         listeners.selectedComponentChange.push(cb);
       }
     },
+    getSelectedComponent: () => statePlugin.getSelectedComponent(),
     connect: () => {
       const connector = shapes.connector(
         {},

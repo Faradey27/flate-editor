@@ -25,6 +25,7 @@ export const createCircle = ({
 }: CircleProps = {}): Component => {
   let hasSelection = false;
   const zoom = usePlugin('zoom');
+  const stateManager = usePlugin('state');
   const circle = shape({ draggable: true });
 
   const renderCircle = (graphics: Graphics) => {
@@ -55,7 +56,7 @@ export const createCircle = ({
     zoom.on(ZoomEvent.change, reRender);
 
     circle.shape.on('pointerover', () => {
-      if (hasSelection) {
+      if (hasSelection || stateManager.isDragging()) {
         return;
       }
       circle.shape.lineStyle(2 / zoom.getZoom().scaleX, 0x138eff);

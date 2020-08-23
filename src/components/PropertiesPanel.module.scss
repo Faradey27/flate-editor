@@ -17,7 +17,32 @@
   grid-template-columns: 1fr 1fr;
 }
 
+.propertiesCell {
+  display: flex;
+  align-items: center;
+  grid-column-end: span spacing(1.5);
+
+  width: 100%;
+  height: spacing(4);
+  border: 1px solid transparent;
+  user-select: none;
+
+  &:focus {
+    outline: 1px solid blue;
+  }
+}
+
 .label {
+  display: block;
   color: var(--iconColor);
   margin-right: spacing(1.5);
+}
+
+.value {
+  border: 1px solid transparent;
+  width: 100%;
+  min-width: spacing(7);
+  color: var(--primaryColor);
+  font-size: 12px;
+  margin-top: 1px;
 }

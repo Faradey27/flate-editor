@@ -11,6 +11,7 @@ export interface Editor {
     type: 'selectedComponentChange',
     cb: (component: Component | null) => void
   ) => void;
+  getSelectedComponent: () => Component | null;
 }
 
 export const initializeEditor = ({
@@ -40,6 +41,7 @@ export const initializeEditor = ({
       app.render([canvas, rect, circle]);
       // app.connect();
     },
+    getSelectedComponent: app.getSelectedComponent,
     on: app.on,
     dropShape: (item: { id: Shapes }, position: { x: number; y: number }) => {
       const shape = app.shapes[item.id];
