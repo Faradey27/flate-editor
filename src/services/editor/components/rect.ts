@@ -2,7 +2,7 @@ import { Graphics } from 'pixi.js';
 
 import { ZoomEvent } from '../plugins/zoom';
 import { ShapeDI } from './shape';
-import { Component, Shapes } from './types.d';
+import { Component, ComponentEvent, Shapes } from './types.d';
 
 export interface RectProps {
   width?: number;
