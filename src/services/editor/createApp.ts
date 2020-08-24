@@ -56,7 +56,25 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
 
   const shapes = createShapesFactory(usePlugin);
 
-  app.stage.interactive = true;
+  const canvas = shapes.rect({
+    left: app.view.offsetWidth / 2 - 826 / 2,
+    top: 24,
+    width: 826,
+    height: Math.min(1168, Math.max(app.view.offsetHeight - 8 * 20, 724)),
+    draggable: false,
+    interactive: false,
+    color: 0xffffff,
+  });
+
+  global.addEventListener('resize', () => {
+    canvas.shape.height = Math.min(
+      1168,
+      Math.max(app.view.offsetHeight - 8 * 20, 724)
+    );
+    canvas.shape.position.x = app.view.offsetWidth / 2 - 826 / 2;
+  });
+
+  app.stage.addChild(canvas.shape);
 
   const { listeners, selectedComponentChangeCb } = createListeners();
 

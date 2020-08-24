@@ -25,20 +25,10 @@ export const initializeEditor = ({
     run: () => {
       app.run();
 
-      const canvas = app.shapes.rect({
-        left: 80,
-        top: 80,
-        width: 800,
-        height: 800,
-        draggable: false,
-        interactive: false,
-        color: 0xffffff,
-      });
-
       const rect = app.shapes.rect({ left: 100, top: 100 });
       const circle = app.shapes.circle({ left: 400, top: 300 });
 
-      app.render([canvas, rect, circle]);
+      app.render([rect, circle]);
       // app.connect();
     },
     getSelectedComponent: app.getSelectedComponent,
