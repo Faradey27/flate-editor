@@ -1,0 +1,51 @@
+@import '../../styles/helpers';
+
+.root {
+  height: spacing(5);
+  background-color: var(--primaryColor);
+
+  display: flex;
+  align-items: center;
+  padding: spacing(0.25, 0.25);
+}
+
+.nameForm {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.name {
+  font-size: 14px;
+  color: var(--white);
+  text-align: center;
+  padding: spacing(0.5) spacing(1);
+  max-width: 724px;
+
+  &:focus {
+    outline: var(--blue100) auto 1px;
+  }
+}
+
+.control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: spacing(1);
+  min-width: spacing(5);
+  height: 100%;
+  fill: var(--white);
+  color: var(--white);
+  opacity: 0.85;
+  font-size: 12px;
+
+  &:hover {
+    opacity: 1;
+    background-color: var(--primaryColorDark);
+  }
+}
+
+.zoomArrowDown {
+  margin-left: spacing(0.5);
+  margin-right: spacing(1);
+}

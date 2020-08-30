@@ -1,3 +1,8 @@
-@function spacing($value: 1) {
-  @return calc(#{$value} * var(--spacing) * 1px);
+@import './theme';
+
+@function spacing($value: 1, $value2: false) {
+  @if $value2 {
+    @return $value * $spacing * 1px $value2 * $spacing * 1px;
+  }
+  @return $value * $spacing * 1px;
 }

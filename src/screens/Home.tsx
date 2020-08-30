@@ -6,7 +6,7 @@ import { EditorContextProvider } from 'services/editor/reactBindings';
 
 import CanvasPlaceholder from 'components/CanvasPlaceholder';
 import ComponentsPanel from 'components/ComponentsPanel';
-import Header from 'components/Header';
+import Header from 'components/Header/Header';
 import PropertiesPanel from 'components/PropertiesPanel';
 
 import classes from './Home.module.scss';
