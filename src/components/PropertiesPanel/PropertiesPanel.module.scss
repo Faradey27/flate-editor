@@ -1,9 +1,10 @@
-@import '../styles/helpers';
+@import '../../styles/helpers';
 
 .root {
   height: 100%;
   background-color: var(--white);
   font-size: 12px;
+  border-left: 1px solid var(--backgroundColor);
 }
 
 .properties {

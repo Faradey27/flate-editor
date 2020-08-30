@@ -1,0 +1,32 @@
+@import '../../../styles/helpers';
+
+.root {
+  position: relative;
+  padding: spacing(0, 1);
+  border-bottom: 1px solid var(--backgroundColor);
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: spacing(1.5) 0;
+  background: none;
+  border: none;
+  width: 100%;
+  outline: none;
+  cursor: pointer;
+}
+
+.summaryTitle {
+  font-size: 12px;
+  margin-left: spacing(1);
+  font-weight: 500;
+}
+
+.details {
+  height: auto;
+  overflow: hidden;
+
+  margin-bottom: spacing(1.5);
+}

@@ -1,0 +1,63 @@
+@import '../../../styles/helpers';
+
+.field {
+  display: flex;
+  position: relative;
+  max-width: 144px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+
+  &:hover {
+    border: 1px solid var(--backgroundColor);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 96px;
+      width: 1px;
+      background-color: var(--backgroundColor);
+    }
+  }
+
+  &:focus-within {
+    border: 1px solid var(--blue100);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 96px;
+      width: 1px;
+      background-color: var(--backgroundColor);
+    }
+  }
+}
+
+.colorInput {
+  max-width: 96px;
+  padding: spacing(1, 1);
+  padding-left: spacing(4);
+  outline: none;
+  font-size: 11px;
+}
+
+.opacityInput {
+  max-width: 48px;
+  padding: spacing(1, 1);
+  outline: none;
+  font-size: 11px;
+}
+
+.colorBox {
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--backgroundColor);
+
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: spacing(1);
+}
