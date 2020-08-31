@@ -1,0 +1,11 @@
+@import '../styles/helpers';
+
+.root {
+  color: var(--white);
+  font-size: 12px;
+  background: var(--blue100);
+  border-radius: spacing(0.75);
+  padding: spacing(1, 1.5);
+  margin: 0 spacing(1);
+  cursor: pointer;
+}

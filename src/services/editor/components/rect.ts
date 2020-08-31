@@ -1,8 +1,7 @@
 import { Graphics } from 'pixi.js';
 
-import { ZoomEvent } from '../plugins/zoom';
 import { ShapeDI } from './shape';
-import { Component, ComponentEvent, Shapes } from './types.d';
+import { Component } from './types.d';
 
 export interface RectProps {
   width?: number;
@@ -55,7 +54,7 @@ export const createRect = ({ shape, usePlugin, renderSelection }: ShapeDI) => ({
   };
 
   if (interactive) {
-    zoom.on(ZoomEvent.change, reRender);
+    zoom.on('change', reRender);
 
     rect.shape.on('pointerover', () => {
       if (hasSelection || stateManager.isDragging()) {
@@ -83,6 +82,6 @@ export const createRect = ({ shape, usePlugin, renderSelection }: ShapeDI) => ({
       hasSelection = false;
       reRender();
     },
-    type: Shapes.rect,
+    type: 'rect',
   };
 };

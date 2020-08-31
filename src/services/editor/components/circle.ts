@@ -1,8 +1,7 @@
 import { Graphics } from 'pixi.js';
 
-import { ZoomEvent } from '../plugins/zoom';
 import { ShapeDI } from './shape';
-import { Component, Shapes } from './types.d';
+import { Component } from './types.d';
 
 interface CircleProps {
   radius?: number;
@@ -53,7 +52,7 @@ export const createCircle = ({
   };
 
   if (interactive) {
-    zoom.on(ZoomEvent.change, reRender);
+    zoom.on('change', reRender);
 
     circle.shape.on('pointerover', () => {
       if (hasSelection || stateManager.isDragging()) {
@@ -81,6 +80,6 @@ export const createCircle = ({
       hasSelection = false;
       reRender();
     },
-    type: Shapes.circle,
+    type: 'circle',
   };
 };

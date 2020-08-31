@@ -1,7 +1,7 @@
 import { Graphics } from 'pixi.js';
 
 import { ShapeDI } from './shape';
-import { Component, ComponentEvent, Shapes } from './types.d';
+import { Component } from './types.d';
 
 interface ConnectorProps {
   color?: number;
@@ -35,7 +35,7 @@ export const createConnector = ({ shape }: ShapeDI) => (
     );
   };
 
-  component1.on(ComponentEvent.positionChange, ({ x, y }) => {
+  component1.on('positionChange', ({ x, y }) => {
     connector.shape.clear();
     connector.shape.lineStyle(2, 0x000000);
 
@@ -45,7 +45,7 @@ export const createConnector = ({ shape }: ShapeDI) => (
     connector.shape.lineTo(component2.shape.x, component2.shape.y);
   });
 
-  component2.on(ComponentEvent.positionChange, ({ x, y }) => {
+  component2.on('positionChange', ({ x, y }) => {
     connector.shape.clear();
     connector.shape.lineStyle(2, 0x000000);
 
@@ -57,6 +57,6 @@ export const createConnector = ({ shape }: ShapeDI) => (
 
   return {
     ...connector,
-    type: Shapes.connector,
+    type: 'connector',
   };
 };

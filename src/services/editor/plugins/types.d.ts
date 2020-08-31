@@ -1,5 +1,7 @@
+export type PluginName = 'state' | 'camera' | 'zoom';
+
 export interface Plugin {
-  getName: () => Plugins;
+  getName: () => PluginName;
   run: () => Plugin;
   release: () => void;
 }

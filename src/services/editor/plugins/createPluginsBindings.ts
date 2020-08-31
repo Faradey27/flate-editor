@@ -1,8 +1,6 @@
 import { StatePlugin } from './statePlugin';
-import { Plugin } from './types.d';
+import { Plugin, PluginName } from './types.d';
 import { ZoomPlugin } from './zoom';
-
-export type PluginName = 'state' | 'camera' | 'zoom';
 
 type PluginInstance = StatePlugin | ZoomPlugin | Plugin;
 

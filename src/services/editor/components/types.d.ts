@@ -7,24 +7,21 @@ declare module 'pixi.js' {
   }
 }
 
-export enum Shapes {
-  rect = 'rect',
-  circle = 'circle',
-  triangle = 'triangle',
-  line = 'line',
-  connector = 'connector',
-  shape = 'shape',
-}
+export type EditorShape =
+  | 'rect'
+  | 'circle'
+  | 'triangle'
+  | 'line'
+  | 'connector'
+  | 'shape';
 
-export type PositionChangeCB = (position: ObservablePoint) => void;
+export type PositionChangeCB = (position: { x: number; y: number }) => void;
 
-export enum ComponentEvent {
-  positionChange = 'positionChange',
-}
+export type ComponentEvent = 'positionChange';
 
 export interface Component {
   id: string;
-  type: Shapes;
+  type: EditorShape;
   shape: Graphics;
   selection: Graphics;
   hideSelection: () => void;

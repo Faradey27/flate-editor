@@ -4,18 +4,18 @@ import PropertyField from './PropertyField';
 import PropertyPanel from './PropertyPanel';
 
 const messages = defineMessages({
-  fill: {
-    id: 'PropertiesPanel.fill',
-    defaultMessage: 'Fill',
+  stroke: {
+    id: 'PropertiesPanel.stroke',
+    defaultMessage: 'Stroke',
   },
 });
 
 const handleChange = () => {};
 
-const FillPanel: React.FC<{}> = () => {
+const StrokePanel: React.FC<{}> = () => {
   const intl = useIntl();
 
-  const color = '#ffffff';
+  const color = '#000000';
   const trailingValue = '100%';
 
   const leadingChild = (
@@ -30,7 +30,7 @@ const FillPanel: React.FC<{}> = () => {
   );
 
   return (
-    <PropertyPanel title={intl.formatMessage(messages.fill)}>
+    <PropertyPanel title={intl.formatMessage(messages.stroke)}>
       <PropertyField
         withTrailingInput
         leadingChild={leadingChild}
@@ -43,4 +43,4 @@ const FillPanel: React.FC<{}> = () => {
   );
 };
 
-export default FillPanel;
+export default StrokePanel;

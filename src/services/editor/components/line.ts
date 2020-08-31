@@ -1,7 +1,7 @@
 import { Graphics } from 'pixi.js';
 
 import { ShapeDI } from './shape';
-import { Component, Shapes } from './types.d';
+import { Component } from './types.d';
 
 interface LineProps {
   startX?: number;
@@ -30,6 +30,6 @@ export const createLine = ({ shape }: ShapeDI) => ({
 
   return {
     ...line,
-    type: Shapes.line,
+    type: 'line',
   };
 };

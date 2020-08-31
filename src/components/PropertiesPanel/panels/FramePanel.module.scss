@@ -1,0 +1,12 @@
+@import '../../../styles/helpers';
+
+.frameContent {
+  display: grid;
+  grid-template-columns: spacing(10, 10);
+  grid-column-gap: spacing(1);
+  grid-row-gap: spacing(0.5);
+}
+
+.label {
+  color: var(--gray200);
+}

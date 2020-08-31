@@ -29,6 +29,8 @@ module.exports = {
     },
   ],
   globals: {
+    React: true,
+    const: true,
     fetch: true,
     fetchMock: true,
     jasmine: true,

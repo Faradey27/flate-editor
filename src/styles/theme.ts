@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-interface Theme {
+interface MyTheme {
   primaryColor: string;
   white: string;
   backgroundColor: string;
@@ -8,7 +8,7 @@ interface Theme {
   spacing: number;
 }
 
-const Theme = createContext({} as Theme);
+const Theme = createContext({} as MyTheme);
 
 export const ThemeProvider = Theme.Provider;
 

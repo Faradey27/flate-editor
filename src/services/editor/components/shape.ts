@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { enableDragAndDrop } from '../helpers/dragAndDrop';
 import { UsePlugin } from '../plugins/createPluginsBindings';
 import { RenderSelection } from './createSelectionRenderer';
-import { Component, ComponentEvent, PositionChangeCB, Shapes } from './types.d';
+import { Component, ComponentEvent, PositionChangeCB } from './types.d';
 
 interface ShapeProps {
   draggable?: boolean;
@@ -13,7 +13,7 @@ interface ShapeProps {
 
 const createListeners = (shape: Graphics) => {
   const listeners: { [key in ComponentEvent]: PositionChangeCB[] } = {
-    [ComponentEvent.positionChange]: [],
+    positionChange: [],
   };
   const changePositionCallback = shape.position.cb;
 
@@ -21,7 +21,7 @@ const createListeners = (shape: Graphics) => {
     // we call original function
     changePositionCallback.call(this);
 
-    const cbs = listeners[ComponentEvent.positionChange];
+    const cbs = listeners.positionChange;
     for (let i = 0; i < cbs.length; i++) {
       cbs[i](shape.position);
     }
@@ -75,7 +75,7 @@ export const createShape: ShapeFactoryCreator = (usePlugin) => ({
 
   return {
     id,
-    type: Shapes.shape,
+    type: 'shape',
     shape,
     selection,
     showSelection: () => {

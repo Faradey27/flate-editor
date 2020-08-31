@@ -1,6 +1,6 @@
 @import '../../../styles/helpers';
 
-.field {
+.root {
   display: flex;
   position: relative;
   max-width: 144px;
@@ -9,21 +9,16 @@
 
   &:hover {
     border: 1px solid var(--backgroundColor);
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 96px;
-      width: 1px;
-      background-color: var(--backgroundColor);
-    }
   }
 
   &:focus-within {
     border: 1px solid var(--blue100);
+  }
+}
 
+.root.withTrailingInput {
+  &:hover,
+  &:focus-within {
     &::before {
       content: '';
       position: absolute;
@@ -36,7 +31,7 @@
   }
 }
 
-.colorInput {
+.input {
   max-width: 96px;
   padding: spacing(1, 1);
   padding-left: spacing(4);
@@ -44,18 +39,14 @@
   font-size: 11px;
 }
 
-.opacityInput {
+.trailingInput {
   max-width: 48px;
   padding: spacing(1, 1);
   outline: none;
   font-size: 11px;
 }
 
-.colorBox {
-  width: 16px;
-  height: 16px;
-  border: 1px solid var(--backgroundColor);
-
+.leadingChild {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);

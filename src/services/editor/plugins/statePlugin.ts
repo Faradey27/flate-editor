@@ -1,6 +1,6 @@
 import { Application } from 'pixi.js';
 
-import { Component, ComponentEvent } from '../components/types.d';
+import { Component } from '../components/types.d';
 import { Plugin } from './types.d';
 
 export interface StatePlugin extends Plugin {
@@ -74,12 +74,12 @@ export const initStatePlugin = (app: Application): StatePlugin => {
 
       if (prevSelectedComponent) {
         prevSelectedComponent.hideSelection();
-        prevSelectedComponent.off(ComponentEvent.positionChange, onChange);
+        prevSelectedComponent.off('positionChange', onChange);
       }
       if (nextSelectedComponent) {
         nextSelectedComponent.showSelection();
         selectedComponentChangeCb(nextSelectedComponent);
-        nextSelectedComponent.on(ComponentEvent.positionChange, onChange);
+        nextSelectedComponent.on('positionChange', onChange);
       }
     },
     getSelectedComponent: () => {

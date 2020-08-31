@@ -2,9 +2,20 @@ import { Application, Container } from 'pixi.js';
 
 import { Plugin } from './types.d';
 
+interface ZoomPayload {
+  x: number;
+  y: number;
+  scaleX: number;
+  scaleY: number;
+}
+
+export type ZoomEventType = 'change';
+
+type ZoomChangeCB = (params: ZoomPayload) => void;
+
 export interface ZoomPlugin extends Plugin {
   getZoom: () => ZoomPayload;
-  on: (type: ZoomEvent, cb: ZoomChangeCB) => void;
+  on: (type: ZoomEventType, cb: ZoomChangeCB) => void;
 }
 
 const FACTOR_SPEED = 0.2;
@@ -16,13 +27,6 @@ interface ZoomParams {
   delta: number;
   x: number;
   y: number;
-}
-
-interface ZoomPayload {
-  x: number;
-  y: number;
-  scaleX: number;
-  scaleY: number;
 }
 
 const zoom = ({ delta, x, y }: ZoomParams, stage: Container): ZoomPayload => {
@@ -52,19 +56,13 @@ const zoom = ({ delta, x, y }: ZoomParams, stage: Container): ZoomPayload => {
   };
 };
 
-export enum ZoomEvent {
-  change = 'change',
-}
-
-type ZoomChangeCB = (params: ZoomPayload) => void;
-
 const createListeners = () => {
-  const listeners: { [key in ZoomEvent]: ZoomChangeCB[] } = {
-    [ZoomEvent.change]: [],
+  const listeners: { [key in ZoomEventType]: ZoomChangeCB[] } = {
+    change: [],
   };
 
   function zoomChangeCb(zoomPayload: ZoomPayload) {
-    const cbs = listeners[ZoomEvent.change];
+    const cbs = listeners.change;
     for (let i = 0; i < cbs.length; i++) {
       cbs[i](zoomPayload);
     }
@@ -115,7 +113,7 @@ export const initZoomPlugin = (app: Application): ZoomPlugin => {
     getName: () => 'zoom' as const,
 
     getZoom: () => currentZoom,
-    on: (_type: ZoomEvent, cb: ZoomChangeCB) => {
+    on: (_type: ZoomEventType, cb: ZoomChangeCB) => {
       listeners.change.push(cb);
     },
   };
