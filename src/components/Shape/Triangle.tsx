@@ -1,11 +1,19 @@
 import { memo } from 'react';
 
-import classes from './Shape.module.scss';
+const svgStyle = {
+  width: 40,
+  height: 40,
+};
+
+const childStyle = {
+  ...svgStyle,
+  strokeWidth: 1,
+};
 
 const Triangle = () => {
   return (
-    <svg className={classes.triangleSvg}>
-      <path d="M 1,30 L 15,1 L 30,30 z" className={classes.triangle} />
+    <svg style={svgStyle}>
+      <path d="M 1,38 L 18,1 L 38,38 z" style={childStyle} />
     </svg>
   );
 };

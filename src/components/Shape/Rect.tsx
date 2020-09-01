@@ -1,11 +1,18 @@
 import { memo } from 'react';
 
-import classes from './Shape.module.scss';
+const svgStyle = {
+  width: 40,
+  height: 20,
+};
+
+const childStyle = {
+  ...svgStyle,
+};
 
 const Rect = () => {
   return (
-    <svg className={classes.rectSvg}>
-      <rect className={classes.rect} />
+    <svg style={svgStyle}>
+      <rect style={childStyle} />
     </svg>
   );
 };

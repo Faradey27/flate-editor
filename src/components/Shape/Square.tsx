@@ -7,15 +7,14 @@ const svgStyle = {
 
 const childStyle = {
   ...svgStyle,
-  strokeWidth: 1,
 };
 
-const Circle = () => {
+const Square = () => {
   return (
     <svg style={svgStyle}>
-      <circle style={childStyle} r={19} cx="50%" cy="50%" />
+      <rect style={childStyle} />
     </svg>
   );
 };
 
-export default memo(Circle);
+export default memo(Square);

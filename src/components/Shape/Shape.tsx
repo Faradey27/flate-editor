@@ -2,8 +2,12 @@ import { memo } from 'react';
 import { useDrag } from 'react-dnd';
 
 import Circle from './Circle';
+import Ellipse from './Ellipse';
 import Rect from './Rect';
+import RoundRect from './RoundRect';
 import classes from './Shape.module.scss';
+import Square from './Square';
+import Text from './Text';
 import Triangle from './Triangle';
 import { Shapes } from './types.d';
 
@@ -15,8 +19,12 @@ interface ShapeProps {
 
 const shapes = {
   rect: Rect,
+  roundRect: RoundRect,
+  square: Square,
+  ellipse: Ellipse,
   circle: Circle,
   triangle: Triangle,
+  text: Text,
 };
 
 const Shape: React.FC<ShapeProps> = ({ name }) => {

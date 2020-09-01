@@ -2,20 +2,21 @@ import { memo } from 'react';
 
 const svgStyle = {
   width: 40,
-  height: 40,
+  height: 20,
 };
 
 const childStyle = {
-  ...svgStyle,
   strokeWidth: 1,
+  width: 38,
+  height: 18,
 };
 
-const Circle = () => {
+const RoundRect = () => {
   return (
     <svg style={svgStyle}>
-      <circle style={childStyle} r={19} cx="50%" cy="50%" />
+      <rect x={1} y={1} rx={5} ry={5} style={childStyle} />
     </svg>
   );
 };
 
-export default memo(Circle);
+export default memo(RoundRect);

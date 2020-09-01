@@ -15,5 +15,5 @@ export const createShapesFactory = (usePlugin: UsePlugin) => {
   const line = createLine({ shape, usePlugin, renderSelection });
   const connector = createConnector({ shape, usePlugin, renderSelection });
 
-  return { rect, circle, line, connector, triangle: rect };
+  return { rect, circle, line, connector, triangle: rect } as any; // TODO use proper types
 };

@@ -33,17 +33,19 @@ const ComponentsPanel = () => {
     <div className={classes.root}>
       <Panel title={intl.formatMessage(messages.simpleShapes)} defaultOpen>
         <Shape name="rect" />
+        <Shape name="roundRect" />
+        <Shape name="text" />
+        <Shape name="ellipse" />
+
+        <Shape name="square" />
         <Shape name="circle" />
+
         <Shape name="triangle" />
         <Shape name="rect" />
         <Shape name="triangle" />
         <Shape name="circle" />
         <Shape name="triangle" />
         <Shape name="circle" />
-        <Shape name="rect" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-        <Shape name="triangle" />
       </Panel>
       <Panel title={intl.formatMessage(messages.flowChart)}>
         <Shape name="rect" />

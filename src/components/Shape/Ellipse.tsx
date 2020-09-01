@@ -2,7 +2,7 @@ import { memo } from 'react';
 
 const svgStyle = {
   width: 40,
-  height: 40,
+  height: 20,
 };
 
 const childStyle = {
@@ -10,12 +10,12 @@ const childStyle = {
   strokeWidth: 1,
 };
 
-const Circle = () => {
+const Ellipse = () => {
   return (
     <svg style={svgStyle}>
-      <circle style={childStyle} r={19} cx="50%" cy="50%" />
+      <ellipse cx="50%" cy="50%" rx={19} ry={9} style={childStyle} />
     </svg>
   );
 };
 
-export default memo(Circle);
+export default memo(Ellipse);
