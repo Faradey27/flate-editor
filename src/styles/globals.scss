@@ -60,3 +60,7 @@ h6 {
 * {
   box-sizing: border-box;
 }
+
+.ReactCollapse--collapse {
+  transition: height 150ms;
+}

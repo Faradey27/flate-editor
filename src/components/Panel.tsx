@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { Collapse } from 'react-collapse';
 import clsx from 'clsx';
 
 import Icon from './Icon';
@@ -28,9 +29,9 @@ const Panel: React.FC<PanelProps> = ({ defaultOpen, title, children }) => {
           height="10"
         />
       </button>
-      <div className={clsx(classes.details, { [classes.open]: isOpen })}>
-        {children}
-      </div>
+      <Collapse isOpened={Boolean(isOpen)}>
+        <div className={classes.details}>{children}</div>
+      </Collapse>
     </div>
   );
 };

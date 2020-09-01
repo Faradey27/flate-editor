@@ -28,19 +28,10 @@
 }
 
 .details {
-  height: 0;
-  overflow: hidden;
-  transition: height 0.1s;
-
   display: grid;
   grid-template-columns: repeat(auto-fit, spacing(5));
   grid-column-gap: spacing(1.5);
   grid-row-gap: spacing(2);
   align-items: center;
-}
-
-.details.open {
-  height: auto;
-  transition: height 0.1s;
-  margin-bottom: spacing(1.5);
+  padding-bottom: spacing(2);
 }
