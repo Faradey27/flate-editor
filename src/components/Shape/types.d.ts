@@ -5,4 +5,6 @@ export type Shapes =
   | 'square'
   | 'roundRect'
   | 'text'
+  | 'rhomb'
+  | 'parallax'
   | 'ellipse';

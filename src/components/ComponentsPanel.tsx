@@ -9,22 +9,6 @@ const messages = defineMessage({
     id: 'ComponentsPanel.simpleShapes',
     defaultMessage: 'Simple shapes',
   },
-  flowChart: {
-    id: 'ComponentsPanel.flowChart',
-    defaultMessage: 'Flowchart',
-  },
-  uml: {
-    id: 'ComponentsPanel.uml',
-    defaultMessage: 'UML',
-  },
-  stateMachine: {
-    id: 'ComponentsPanel.stateMachine',
-    defaultMessage: 'State machine',
-  },
-  arrows: {
-    id: 'ComponentsPanel.arrows',
-    defaultMessage: 'Arrows',
-  },
 });
 
 const ComponentsPanel = () => {
@@ -39,69 +23,10 @@ const ComponentsPanel = () => {
 
         <Shape name="square" />
         <Shape name="circle" />
+        <Shape name="rhomb" />
+        <Shape name="triangle" />
 
-        <Shape name="triangle" />
-        <Shape name="rect" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-      </Panel>
-      <Panel title={intl.formatMessage(messages.flowChart)}>
-        <Shape name="rect" />
-        <Shape name="circle" />
-        <Shape name="triangle" />
-        <Shape name="rect" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-        <Shape name="rect" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-        <Shape name="triangle" />
-      </Panel>
-      <Panel title={intl.formatMessage(messages.uml)}>
-        <Shape name="rect" />
-        <Shape name="circle" />
-        <Shape name="triangle" />
-        <Shape name="rect" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-        <Shape name="rect" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-        <Shape name="triangle" />
-      </Panel>
-      <Panel title={intl.formatMessage(messages.stateMachine)}>
-        <Shape name="rect" />
-        <Shape name="circle" />
-        <Shape name="triangle" />
-        <Shape name="rect" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-        <Shape name="rect" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-        <Shape name="triangle" />
-      </Panel>
-      <Panel title={intl.formatMessage(messages.arrows)}>
-        <Shape name="rect" />
-        <Shape name="circle" />
-        <Shape name="triangle" />
-        <Shape name="rect" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-        <Shape name="rect" />
-        <Shape name="triangle" />
-        <Shape name="circle" />
-        <Shape name="triangle" />
+        <Shape name="parallax" />
       </Panel>
     </div>
   );

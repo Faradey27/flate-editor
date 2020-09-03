@@ -3,7 +3,9 @@ import { useDrag } from 'react-dnd';
 
 import Circle from './Circle';
 import Ellipse from './Ellipse';
+import Parallax from './Parallax';
 import Rect from './Rect';
+import Rhomb from './Rhomb';
 import RoundRect from './RoundRect';
 import classes from './Shape.module.scss';
 import Square from './Square';
@@ -25,6 +27,8 @@ const shapes = {
   circle: Circle,
   triangle: Triangle,
   text: Text,
+  rhomb: Rhomb,
+  parallax: Parallax,
 };
 
 const Shape: React.FC<ShapeProps> = ({ name }) => {
