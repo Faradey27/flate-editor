@@ -16,3 +16,7 @@
 .text {
   fill: var(--primaryColor);
 }
+
+.shapeDragPreview {
+  border: 1px dashed var(--primaryColor);
+}

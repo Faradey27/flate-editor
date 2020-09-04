@@ -1,6 +1,7 @@
 import { defineMessage, useIntl } from 'react-intl';
 
 import classes from './ComponentsPanel.module.scss';
+import { CustomDragLayer } from './CustomDragLayer';
 import Panel from './Panel';
 import Shape from './Shape';
 
@@ -28,6 +29,7 @@ const ComponentsPanel = () => {
 
         <Shape name="parallax" />
       </Panel>
+      <CustomDragLayer />
     </div>
   );
 };
