@@ -1,19 +1,21 @@
 import { memo } from 'react';
 
-const svgStyle = {
-  width: 40,
-  height: 40,
-};
+interface TriangleProps {
+  dashed?: boolean;
+}
 
-const childStyle = {
-  ...svgStyle,
-  strokeWidth: 1,
-};
-
-const Triangle = () => {
+const Triangle: React.FC<TriangleProps> = ({ dashed }) => {
   return (
-    <svg style={svgStyle}>
-      <path d="M 1,38 L 18,1 L 38,38 z" style={childStyle} />
+    <svg viewBox="0 0 40 40">
+      <path
+        d="M 1,38 L 18,1 L 38,38 z"
+        width={40}
+        height={40}
+        strokeWidth={1}
+        fillOpacity={0}
+        vectorEffect="non-scaling-stroke"
+        strokeDasharray={dashed ? 3 : 0}
+      />
     </svg>
   );
 };

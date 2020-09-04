@@ -1,19 +1,22 @@
 import { memo } from 'react';
 
-const svgStyle = {
-  width: 40,
-  height: 20,
-};
+interface EllipseProps {
+  dashed?: boolean;
+}
 
-const childStyle = {
-  ...svgStyle,
-  strokeWidth: 1,
-};
-
-const Ellipse = () => {
+const Ellipse: React.FC<EllipseProps> = ({ dashed }) => {
   return (
-    <svg style={svgStyle}>
-      <ellipse cx="50%" cy="50%" rx={19} ry={9} style={childStyle} />
+    <svg viewBox="0 0 40 20">
+      <ellipse
+        cx="50%"
+        cy="50%"
+        rx={19}
+        ry={9}
+        strokeWidth={1}
+        fillOpacity={0}
+        vectorEffect="non-scaling-stroke"
+        strokeDasharray={dashed ? 3 : 0}
+      />
     </svg>
   );
 };

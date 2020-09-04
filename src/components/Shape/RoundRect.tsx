@@ -1,20 +1,24 @@
 import { memo } from 'react';
 
-const svgStyle = {
-  width: 40,
-  height: 20,
-};
+interface RoundRectProps {
+  dashed?: boolean;
+}
 
-const childStyle = {
-  strokeWidth: 1,
-  width: 38,
-  height: 18,
-};
-
-const RoundRect = () => {
+const RoundRect: React.FC<RoundRectProps> = ({ dashed }) => {
   return (
-    <svg style={svgStyle}>
-      <rect x={1} y={1} rx={5} ry={5} style={childStyle} />
+    <svg viewBox="0 0 40 20">
+      <rect
+        x={1}
+        y={1}
+        rx={5}
+        ry={5}
+        strokeWidth={1}
+        width={38}
+        height={18}
+        fillOpacity={0}
+        strokeDasharray={dashed ? 3 : 0}
+        vectorEffect="non-scaling-stroke"
+      />
     </svg>
   );
 };

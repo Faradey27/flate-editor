@@ -1,18 +1,19 @@
 import { memo } from 'react';
 
-const svgStyle = {
-  width: 40,
-  height: 20,
-};
+interface RectProps {
+  dashed?: boolean;
+}
 
-const childStyle = {
-  ...svgStyle,
-};
-
-const Rect = () => {
+const Rect: React.FC<RectProps> = ({ dashed }) => {
   return (
-    <svg style={svgStyle}>
-      <rect style={childStyle} />
+    <svg viewBox="0 0 40 20">
+      <rect
+        width={40}
+        height={20}
+        fillOpacity={0}
+        strokeDasharray={dashed ? 3 : 0}
+        vectorEffect="non-scaling-stroke"
+      />
     </svg>
   );
 };

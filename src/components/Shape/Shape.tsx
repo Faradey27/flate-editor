@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import { useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
@@ -9,6 +9,7 @@ import Rect from './Rect';
 import Rhomb from './Rhomb';
 import RoundRect from './RoundRect';
 import classes from './Shape.module.scss';
+import { getShapeSize } from './shapeSize';
 import Square from './Square';
 import Text from './Text';
 import Triangle from './Triangle';
@@ -18,6 +19,7 @@ export const dragType = 'shape';
 
 interface ShapeProps {
   name: Shapes;
+  mode?: 'icon' | 'dropPreview';
 }
 
 const shapes = {
@@ -32,7 +34,7 @@ const shapes = {
   parallax: Parallax,
 };
 
-const Shape: React.FC<ShapeProps> = ({ name }) => {
+const Shape: React.FC<ShapeProps> = ({ name, mode }) => {
   const [, drag, preview] = useDrag({
     item: { id: name, type: dragType },
   });
@@ -43,9 +45,15 @@ const Shape: React.FC<ShapeProps> = ({ name }) => {
 
   const SelectedShape = shapes[name];
 
+  const size = getShapeSize(name, mode === 'dropPreview' ? 'large' : 'small');
+
+  const style = useMemo(() => {
+    return { width: size.width, height: size.height };
+  }, [size]);
+
   return (
-    <div ref={drag} className={classes.shape}>
-      <SelectedShape />
+    <div ref={drag} className={classes.shape} style={style}>
+      <SelectedShape dashed={mode === 'dropPreview'} />
     </div>
   );
 };

@@ -1,21 +1,20 @@
 import { memo } from 'react';
 
-const svgStyle = {
-  width: 40,
-  height: 40,
-};
+interface ParallaxProps {
+  dashed?: boolean;
+}
 
-const childStyle = {
-  ...svgStyle,
-  strokeWidth: 1,
-};
-
-const Parallax = () => {
+const Parallax: React.FC<ParallaxProps> = ({ dashed }) => {
   return (
-    <svg style={svgStyle}>
+    <svg viewBox="0 0 40 20">
       <path
-        d="M 1.44 30 L 6.24 7.68 L 39.24 7.68 L 34.44 30 Z"
-        style={childStyle}
+        d="M 1.44 19 L 6.24 1 L 39.24 1 L 34.44 19 Z"
+        width={40}
+        height={20}
+        strokeWidth={1}
+        fillOpacity={0}
+        vectorEffect="non-scaling-stroke"
+        strokeDasharray={dashed ? 3 : 0}
       />
     </svg>
   );

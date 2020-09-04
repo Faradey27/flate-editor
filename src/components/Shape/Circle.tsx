@@ -1,19 +1,21 @@
 import { memo } from 'react';
 
-const svgStyle = {
-  width: 40,
-  height: 40,
-};
+interface CircleProps {
+  dashed?: boolean;
+}
 
-const childStyle = {
-  ...svgStyle,
-  strokeWidth: 1,
-};
-
-const Circle = () => {
+const Circle: React.FC<CircleProps> = ({ dashed }) => {
   return (
-    <svg style={svgStyle}>
-      <circle style={childStyle} r={19} cx="50%" cy="50%" />
+    <svg viewBox="0 0 40 40">
+      <circle
+        r={19}
+        cx="50%"
+        cy="50%"
+        strokeWidth={1}
+        fillOpacity={0}
+        vectorEffect="non-scaling-stroke"
+        strokeDasharray={dashed ? 3 : 0}
+      />
     </svg>
   );
 };

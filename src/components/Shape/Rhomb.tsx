@@ -1,19 +1,21 @@
 import { memo } from 'react';
 
-const svgStyle = {
-  width: 40,
-  height: 40,
-};
+interface RhombProps {
+  dashed?: boolean;
+}
 
-const childStyle = {
-  ...svgStyle,
-  strokeWidth: 1,
-};
-
-const Rhomb = () => {
+const Rhomb: React.FC<RhombProps> = ({ dashed }) => {
   return (
-    <svg style={svgStyle}>
-      <path d="M 19 1 L 38 19 L 19 38 L 1 19 Z" style={childStyle} />
+    <svg viewBox="0 0 40 40">
+      <path
+        d="M 19 1 L 38 19 L 19 38 L 1 19 Z"
+        width={40}
+        height={40}
+        strokeWidth={1}
+        fillOpacity={0}
+        vectorEffect="non-scaling-stroke"
+        strokeDasharray={dashed ? 3 : 0}
+      />
     </svg>
   );
 };
