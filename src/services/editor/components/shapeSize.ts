@@ -1,14 +1,34 @@
-import { Shapes } from './types';
+import { EditorShape } from './types.d';
 
-export const getShapeSize = (name: Shapes, size: 'large' | 'small') => {
+export type ShapeSizeType<T> = T extends 'roundRect'
+  ? { width: number; height: number; borderRadius: number }
+  : { width: number; height: number };
+
+export type GetShapeSize = <T extends EditorShape>(
+  type: T,
+  size: 'large' | 'small'
+) => ShapeSizeType<T>;
+
+export const getShapeSize: GetShapeSize = <T extends EditorShape>(
+  name: T,
+  size: 'large' | 'small'
+) => {
   const sizes = {
+    line: {
+      large: { width: 0, height: 0 },
+      small: { width: 0, height: 0 },
+    },
+    shape: {
+      large: { width: 120, height: 60 },
+      small: { width: 40, height: 20 },
+    },
     rect: {
       large: { width: 120, height: 60 },
       small: { width: 40, height: 20 },
     },
     roundRect: {
-      large: { width: 120, height: 60 },
-      small: { width: 40, height: 20 },
+      large: { width: 120, height: 60, borderRadius: 12 },
+      small: { width: 40, height: 20, borderRadius: 8 },
     },
     parallax: {
       large: { width: 120, height: 60 },
@@ -40,5 +60,7 @@ export const getShapeSize = (name: Shapes, size: 'large' | 'small') => {
     },
   };
 
-  return sizes[name][size];
+  const value = sizes[name][size];
+
+  return value as ShapeSizeType<T>;
 };

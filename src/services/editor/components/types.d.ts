@@ -8,12 +8,17 @@ declare module 'pixi.js' {
 }
 
 export type EditorShape =
+  | 'shape'
   | 'rect'
   | 'circle'
   | 'triangle'
+  | 'square'
+  | 'roundRect'
+  | 'text'
+  | 'rhomb'
   | 'line'
-  | 'connector'
-  | 'shape';
+  | 'parallax'
+  | 'ellipse';
 
 export type PositionChangeCB = (position: { x: number; y: number }) => void;
 

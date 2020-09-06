@@ -118,6 +118,7 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
       return methods;
     },
     getStage: () => app.stage,
+    usePlugin,
   };
 
   return methods;

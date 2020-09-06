@@ -1,18 +1,35 @@
-import { Shapes } from 'components/Shape/types.d';
-
-import { Component } from './components/types';
+import { getShapeSize } from './components/shapeSize';
+import { Component, EditorShape } from './components/types';
 import { createApp } from './createApp';
 
 export interface Editor {
   run: () => void;
   release: () => void;
-  dropShape: (item: { id: Shapes }, position: { x: number; y: number }) => void;
+  dropShape: (
+    item: { id: EditorShape },
+    position: { x: number; y: number }
+  ) => void;
   on: (
     type: 'selectedComponentChange',
     cb: (component: Component | null) => void
   ) => void;
   getSelectedComponent: () => Component | null;
 }
+
+const getDropPosition = (
+  position: { x: number; y: number },
+  id: EditorShape
+) => {
+  if (id === 'circle' || id === 'ellipse') {
+    const circleSize = getShapeSize(id, 'large');
+    return {
+      x: position.x + circleSize.width / 2,
+      y: position.y + circleSize.height / 2,
+    };
+  }
+
+  return position;
+};
 
 export const initializeEditor = ({
   view,
@@ -33,10 +50,19 @@ export const initializeEditor = ({
     },
     getSelectedComponent: app.getSelectedComponent,
     on: app.on,
-    dropShape: (item: { id: Shapes }, position: { x: number; y: number }) => {
+    dropShape: (
+      item: { id: EditorShape },
+      position: { x: number; y: number }
+    ) => {
       const shape = app.shapes[item.id];
+      const dropPosition = getDropPosition(position, item.id);
       if (shape) {
-        app.render(shape({ left: position.x, top: position.y }));
+        const newComponent = shape({
+          left: dropPosition.x,
+          top: dropPosition.y,
+        });
+        app.render(newComponent);
+        app.usePlugin('state').setSelectedComponentId(newComponent.id);
       }
     },
     release: () => {

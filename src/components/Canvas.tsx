@@ -2,10 +2,10 @@ import { RefObject, useEffect, useRef } from 'react';
 import { DragObjectWithType, useDrop } from 'react-dnd';
 
 import { Editor, initializeEditor } from 'services/editor';
+import { EditorShape } from 'services/editor/components/types';
 
 import classes from './Canvas.module.scss';
 import { dragType } from './Shape';
-import { Shapes } from './Shape/types.d';
 
 interface CanvasProps {
   onEditorReady: (editor: Editor) => void;
@@ -17,7 +17,7 @@ const Canvas: React.FC<CanvasProps> = ({ onEditorReady }) => {
 
   const [, drop] = useDrop({
     accept: dragType,
-    drop: (item: DragObjectWithType & { id: Shapes }, monitor) => {
+    drop: (item: DragObjectWithType & { id: EditorShape }, monitor) => {
       const dropOffset = monitor.getSourceClientOffset();
 
       if (!dropOffset || !canvasRef.current) {

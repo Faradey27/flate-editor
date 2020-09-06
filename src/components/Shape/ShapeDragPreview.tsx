@@ -1,11 +1,11 @@
 import React, { memo } from 'react';
 
+import { EditorShape } from 'services/editor/components/types';
+
 import Shape from './Shape';
-import classes from './Shape.module.scss';
-import { Shapes } from './types';
 
 export interface ShapeDragPreviewProps {
-  id: Shapes;
+  id: EditorShape;
 }
 
 const ShapeDragPreview: React.FC<ShapeDragPreviewProps> = ({ id }) => {
