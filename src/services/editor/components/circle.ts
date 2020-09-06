@@ -51,10 +51,10 @@ export const createCircle = ({
     renderCircle(circle.shape);
     renderSelection({
       x: -radius,
-      y: -radius,
+      y: ry ? -ry : -radius,
       selection: circle.selection,
       width: radius * 2,
-      height: radius * 2,
+      height: ry ? ry * 2 : radius * 2,
       hasSelection,
       interactive,
     });

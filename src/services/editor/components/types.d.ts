@@ -17,6 +17,7 @@ export type EditorShape =
   | 'text'
   | 'rhomb'
   | 'line'
+  | 'connector'
   | 'parallax'
   | 'ellipse';
 

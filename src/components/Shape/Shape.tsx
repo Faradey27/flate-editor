@@ -33,6 +33,9 @@ const shapes = {
   text: Text,
   rhomb: Rhomb,
   parallax: Parallax,
+  shape: () => null,
+  line: () => null,
+  connector: () => null,
 };
 
 const Shape: React.FC<ShapeProps> = ({ name, mode }) => {

@@ -18,6 +18,10 @@ export const getShapeSize: GetShapeSize = <T extends EditorShape>(
       large: { width: 0, height: 0 },
       small: { width: 0, height: 0 },
     },
+    connector: {
+      large: { width: 0, height: 0 },
+      small: { width: 0, height: 0 },
+    },
     shape: {
       large: { width: 120, height: 60 },
       small: { width: 40, height: 20 },
