@@ -1,5 +1,8 @@
 import { defineMessages, useIntl } from 'react-intl';
 
+import { useSelectedComponent } from 'hooks/useSelectedComponentFrame';
+
+import { renderLabel } from './FramePanel';
 import PropertyField from './PropertyField';
 import PropertyPanel from './PropertyPanel';
 
@@ -14,30 +17,39 @@ const handleChange = () => {};
 
 const StrokePanel: React.FC<{}> = () => {
   const intl = useIntl();
+  const { stroke } = useSelectedComponent();
 
-  const color = '#000000';
   const trailingValue = '100%';
 
-  const leadingChild = (
+  const leadingChildColor = (
     <div
       style={{
         width: 16,
         height: 16,
         border: '1px solid rgba(0, 0, 0, 0.1)',
-        background: color,
+        background: `#${stroke.draftStrokeColor}`,
       }}
     />
   );
+
+  if (!stroke.draftStrokeColor) {
+    return null;
+  }
 
   return (
     <PropertyPanel title={intl.formatMessage(messages.stroke)}>
       <PropertyField
         withTrailingInput
-        leadingChild={leadingChild}
-        value={color.slice(1).toUpperCase()}
+        leadingChild={leadingChildColor}
+        value={stroke.draftStrokeColor.toUpperCase()}
         trailingInputValue={trailingValue}
         onChange={handleChange}
         onTrailingInputChange={handleChange}
+      />
+      <PropertyField
+        leadingChild={renderLabel('W')}
+        value={stroke.draftStrokeWidth || 0}
+        onChange={handleChange}
       />
     </PropertyPanel>
   );

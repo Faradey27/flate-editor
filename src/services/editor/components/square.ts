@@ -32,7 +32,12 @@ export const createSquare = ({
     shape,
     usePlugin,
     renderSelection,
-  })({ width, height, left, top, color, draggable, interactive });
+  })({
+    frame: { width, height, x: left, y: top },
+    style: { fillColor: color },
+    draggable,
+    interactive,
+  });
 
   return square;
 };

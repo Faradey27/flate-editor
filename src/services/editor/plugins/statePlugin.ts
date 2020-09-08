@@ -12,7 +12,11 @@ export interface StatePlugin extends Plugin {
   setSelectedComponentId: (id: string) => void;
   getSelectedComponent: () => Component | null;
   on: (
-    type: 'selectedComponentChange',
+    type: 'componentSelect',
+    cb: (component: Component | null) => void
+  ) => void;
+  off: (
+    type: 'componentSelect',
     cb: (component: Component | null) => void
   ) => void;
 }
@@ -21,20 +25,20 @@ export type SelectedComponentChangeCB = (component: Component | null) => void;
 
 const createListeners = () => {
   const listeners: {
-    [key in 'selectedComponentChange']: SelectedComponentChangeCB[];
+    [key in 'componentSelect']: SelectedComponentChangeCB[];
   } = {
-    selectedComponentChange: [],
+    componentSelect: [],
   };
 
-  function selectedComponentChangeCb(component: Component | null) {
-    const cbs = listeners.selectedComponentChange;
+  function componentSelectCb(component: Component | null) {
+    const cbs = listeners.componentSelect;
     for (let i = 0; i < cbs.length; i++) {
       cbs[i](component);
     }
   }
 
   return {
-    selectedComponentChangeCb,
+    componentSelectCb,
     listeners,
   };
 };
@@ -44,7 +48,7 @@ export const initStatePlugin = (app: Application): StatePlugin => {
   let selectedComponentId: string = '';
   const components: Component[] = [];
 
-  const { listeners, selectedComponentChangeCb } = createListeners();
+  const { listeners, componentSelectCb } = createListeners();
 
   const methods = {
     run: () => methods,
@@ -62,48 +66,47 @@ export const initStatePlugin = (app: Application): StatePlugin => {
       if (selectedComponentId === id) {
         return;
       }
+
       const prevSelectedComponent = components.find(
         (comp) => comp.id === selectedComponentId
       );
       const nextSelectedComponent = components.find((comp) => comp.id === id);
 
-      selectedComponentId = id;
-
-      const onChange = () =>
-        selectedComponentChangeCb(nextSelectedComponent || null);
-
       if (prevSelectedComponent) {
         prevSelectedComponent.hideSelection();
-        prevSelectedComponent.off('positionChange', onChange);
       }
+
       if (nextSelectedComponent) {
         nextSelectedComponent.showSelection();
-        selectedComponentChangeCb(nextSelectedComponent);
-        nextSelectedComponent.on('positionChange', onChange);
-      }
-    },
-    getSelectedComponent: () => {
-      if (!selectedComponentId) {
-        return null;
       }
 
-      return (
-        components.find((component) => component.id === selectedComponentId) ||
-        null
-      );
+      selectedComponentId = id;
+      componentSelectCb(nextSelectedComponent || null);
     },
+    getSelectedComponent: () =>
+      components.find((component) => component.id === selectedComponentId) ||
+      null,
     addComponents: (newComponents: Component[]) => {
       components.push(...newComponents);
-
       app.stage.addChild(...newComponents.map((component) => component.shape));
     },
     getComponents: () => components,
     on: (
-      type: 'selectedComponentChange',
+      type: 'componentSelect',
       cb: (component: Component | null) => void
     ) => {
-      if (type === 'selectedComponentChange') {
-        listeners.selectedComponentChange.push(cb);
+      if (type === 'componentSelect') {
+        listeners.componentSelect.push(cb);
+      }
+    },
+    off: (
+      type: 'componentSelect',
+      cb: (component: Component | null) => void
+    ) => {
+      if (type === 'componentSelect') {
+        listeners.componentSelect = listeners.componentSelect.filter(
+          (callback) => callback !== cb
+        );
       }
     },
   };

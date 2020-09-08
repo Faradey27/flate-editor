@@ -1,5 +1,7 @@
 import { defineMessages, useIntl } from 'react-intl';
 
+import { useSelectedComponent } from 'hooks/useSelectedComponentFrame';
+
 import PropertyField from './PropertyField';
 import PropertyPanel from './PropertyPanel';
 
@@ -14,8 +16,8 @@ const handleChange = () => {};
 
 const FillPanel: React.FC<{}> = () => {
   const intl = useIntl();
+  const { fillColor } = useSelectedComponent();
 
-  const color = '#ffffff';
   const trailingValue = '100%';
 
   const leadingChild = (
@@ -24,7 +26,7 @@ const FillPanel: React.FC<{}> = () => {
         width: 16,
         height: 16,
         border: '1px solid rgba(0, 0, 0, 0.1)',
-        background: color,
+        background: `#${fillColor.draftFillColor}`,
       }}
     />
   );
@@ -34,7 +36,7 @@ const FillPanel: React.FC<{}> = () => {
       <PropertyField
         withTrailingInput
         leadingChild={leadingChild}
-        value={color.slice(1).toUpperCase()}
+        value={fillColor.draftFillColor.toUpperCase()}
         trailingInputValue={trailingValue}
         onChange={handleChange}
         onTrailingInputChange={handleChange}

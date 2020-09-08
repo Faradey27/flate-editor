@@ -1,6 +1,7 @@
 import { getShapeSize } from './components/shapeSize';
 import { Component, EditorShape } from './components/types';
 import { createApp } from './createApp';
+import { StatePlugin } from './plugins/statePlugin';
 
 export interface Editor {
   run: () => void;
@@ -9,11 +10,7 @@ export interface Editor {
     item: { id: EditorShape },
     position: { x: number; y: number }
   ) => void;
-  on: (
-    type: 'selectedComponentChange',
-    cb: (component: Component | null) => void
-  ) => void;
-  getSelectedComponent: () => Component | null;
+  stateManager: StatePlugin;
 }
 
 const getDropPosition = (
@@ -42,14 +39,13 @@ export const initializeEditor = ({
     run: () => {
       app.run();
 
-      const rect = app.shapes.rect({ left: 100, top: 100 });
+      const rect = app.shapes.rect({ frame: { x: 100, y: 100 } });
       const circle = app.shapes.circle({ left: 400, top: 300 });
 
       app.render([rect, circle]);
       // app.connect();
     },
-    getSelectedComponent: app.getSelectedComponent,
-    on: app.on,
+    stateManager: app.stateManager,
     dropShape: (
       item: { id: EditorShape },
       position: { x: number; y: number }

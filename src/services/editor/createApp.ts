@@ -10,26 +10,6 @@ import { initZoomPlugin } from './plugins/zoom';
 
 export type SelectedComponentChangeCB = (component: Component | null) => void;
 
-const createListeners = () => {
-  const listeners: {
-    [key in 'selectedComponentChange']: SelectedComponentChangeCB[];
-  } = {
-    selectedComponentChange: [],
-  };
-
-  function selectedComponentChangeCb(component: Component | null) {
-    const cbs = listeners.selectedComponentChange;
-    for (let i = 0; i < cbs.length; i++) {
-      cbs[i](component);
-    }
-  }
-
-  return {
-    selectedComponentChangeCb,
-    listeners,
-  };
-};
-
 export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
   const theme = getEditorTheme();
 
@@ -57,13 +37,17 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
   const shapes = createShapesFactory(usePlugin);
 
   const canvas = shapes.rect({
-    left: app.view.offsetWidth / 2 - 826 / 2,
-    top: 24,
-    width: 826,
-    height: Math.min(1168, Math.max(app.view.offsetHeight - 8 * 20, 724)),
+    frame: {
+      x: app.view.offsetWidth / 2 - 826 / 2,
+      y: 24,
+      width: 826,
+      height: Math.min(1168, Math.max(app.view.offsetHeight - 8 * 20, 724)),
+    },
+    style: {
+      fillColor: 0xffffff,
+    },
     draggable: false,
     interactive: false,
-    color: 0xffffff,
   });
 
   global.addEventListener('resize', () => {
@@ -75,10 +59,6 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
   });
 
   app.stage.addChild(canvas.shape);
-
-  const { listeners, selectedComponentChangeCb } = createListeners();
-
-  statePlugin.on('selectedComponentChange', selectedComponentChangeCb);
 
   const methods = {
     run: () => {
@@ -93,16 +73,8 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
         statePlugin.addComponents([components]);
       }
     },
+    stateManager: statePlugin,
     shapes,
-    on: (
-      type: 'selectedComponentChange',
-      cb: (component: Component | null) => void
-    ) => {
-      if (type === 'selectedComponentChange') {
-        listeners.selectedComponentChange.push(cb);
-      }
-    },
-    getSelectedComponent: () => statePlugin.getSelectedComponent(),
     connect: () => {
       const connector = shapes.connector(
         {},

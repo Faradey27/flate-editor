@@ -4,60 +4,85 @@ import { ShapeDI } from './shape';
 import { getShapeSize } from './shapeSize';
 import { Component } from './types.d';
 
+interface RectStyle {
+  fillColor: number;
+  borderWidth: number;
+  borderColor: number;
+  borderRadius: number;
+}
+
+interface RectFrame {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+}
+
 export interface RectProps {
-  width?: number;
-  height?: number;
-  left?: number;
-  top?: number;
-  color?: number;
-  borderRadius?: number;
+  frame?: Partial<RectFrame>;
+  style?: Partial<RectStyle>;
   draggable?: boolean;
   interactive?: boolean;
 }
 
 const size = getShapeSize('rect', 'large');
 
+const defaultFrame: RectFrame = {
+  width: size.width,
+  height: size.height,
+  x: 0,
+  y: 0,
+};
+
+const defaultStyle: RectStyle = {
+  fillColor: 0x77cce7,
+  borderColor: 0x000000,
+  borderRadius: 0,
+  borderWidth: 0,
+};
+
+const renderRect = (graphics: Graphics, frame: RectFrame, style: RectStyle) => {
+  graphics.clear();
+  graphics.beginFill(style.fillColor);
+  if (style.borderWidth) {
+    graphics.lineStyle(style.borderWidth, style.borderColor);
+  }
+
+  const { x, y, width, height } = frame;
+
+  if (style.borderRadius) {
+    // we always set 0, 0, as initial position immutable
+    graphics.drawRoundedRect(0, 0, width, height, style.borderRadius);
+  } else {
+    // we always set 0, 0, as initial position immutable
+    graphics.drawRect(0, 0, width, height);
+  }
+  // then we set desired position
+  graphics.position.set(graphics.position.x || x, graphics.position.y || y);
+  graphics.endFill();
+};
+
 export const createRect = ({ shape, usePlugin, renderSelection }: ShapeDI) => ({
-  width = size.width,
-  height = size.height,
-  left = 0,
-  top = 0,
-  color = 0x77cce7,
+  frame = defaultFrame,
+  style = defaultStyle,
   draggable = true,
   interactive = true,
-  borderRadius,
 }: RectProps = {}): Component => {
+  const frameWithDefaults = { ...defaultFrame, ...frame };
+  const styleWithDefaults = { ...defaultStyle, ...style };
+
   let hasSelection = false;
   const zoom = usePlugin('zoom');
   const stateManager = usePlugin('state');
 
   const rect = shape({ draggable });
 
-  const renderRect = (graphics: Graphics) => {
-    graphics.beginFill(color);
-
-    if (borderRadius) {
-      // we always set 0, 0, as initial position immutable
-      graphics.drawRoundedRect(0, 0, width, height, borderRadius);
-    } else {
-      // we always set 0, 0, as initial position immutable
-      graphics.drawRect(0, 0, width, height);
-    }
-    // then we set desired position
-    graphics.position.set(
-      graphics.position.x || left,
-      graphics.position.y || top
-    );
-    graphics.endFill();
-  };
-
   const reRender = () => {
-    rect.shape.clear();
-    renderRect(rect.shape);
+    renderRect(rect.shape, frameWithDefaults, styleWithDefaults);
     renderSelection({
       selection: rect.selection,
-      width,
-      height,
+      width: frameWithDefaults.width,
+      height: frameWithDefaults.height,
       hasSelection,
       interactive,
     });
@@ -70,13 +95,17 @@ export const createRect = ({ shape, usePlugin, renderSelection }: ShapeDI) => ({
       if (hasSelection || stateManager.isDragging()) {
         return;
       }
-      rect.shape.lineStyle(2 / zoom.getZoom().scaleX, 0x138eff);
-      renderRect(rect.shape);
+      const borderWidth = 2 / zoom.getZoom().scaleX;
+      const borderColor = 0x138eff;
+      renderRect(rect.shape, frameWithDefaults, {
+        ...styleWithDefaults,
+        borderWidth,
+        borderColor,
+      });
     });
 
     rect.shape.on('pointerout', () => {
-      rect.shape.clear();
-      renderRect(rect.shape);
+      renderRect(rect.shape, frameWithDefaults, styleWithDefaults);
     });
   }
 
@@ -92,6 +121,7 @@ export const createRect = ({ shape, usePlugin, renderSelection }: ShapeDI) => ({
       hasSelection = false;
       reRender();
     },
+    getFillColor: () => style.fillColor,
     type: 'rect',
-  };
+  } as any;
 };

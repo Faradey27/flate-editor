@@ -34,7 +34,12 @@ export const createRoundRect = ({
     shape,
     usePlugin,
     renderSelection,
-  })({ width, height, left, top, color, draggable, interactive, borderRadius });
+  })({
+    frame: { width, height, x: left, y: top },
+    style: { fillColor: color, borderRadius },
+    draggable,
+    interactive,
+  });
 
   return roundRect;
 };

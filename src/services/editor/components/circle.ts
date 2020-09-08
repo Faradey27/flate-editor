@@ -89,6 +89,7 @@ export const createCircle = ({
       hasSelection = false;
       reRender();
     },
+    getFillColor: () => color,
     type: 'circle',
   };
 };

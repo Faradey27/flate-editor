@@ -1,6 +1,6 @@
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useSelectedComponent } from 'hooks/useSelectedComponent';
+import { useSelectedComponent } from 'hooks/useSelectedComponentFrame';
 
 import classes from './FramePanel.module.scss';
 import PropertyField from './PropertyField';
@@ -13,46 +13,41 @@ const messages = defineMessages({
   },
 });
 
-const renderLabel = (label: string) => {
+export const renderLabel = (label: string) => {
   return <span className={classes.label}>{label}</span>;
 };
 
 const FramePanel: React.FC<{}> = () => {
   const intl = useIntl();
 
-  const {
-    x,
-    y,
-    width,
-    height,
-    setX,
-    setY,
-    setWidth,
-    setHeight,
-  } = useSelectedComponent();
+  const { frame } = useSelectedComponent();
 
   return (
     <PropertyPanel title={intl.formatMessage(messages.frame)}>
       <div className={classes.frameContent}>
         <PropertyField
           leadingChild={renderLabel('X')}
-          value={x}
-          onChange={setX}
+          value={frame.draftX}
+          onChangeApply={frame.save}
+          onChange={frame.setDraftX}
         />
         <PropertyField
           leadingChild={renderLabel('Y')}
-          value={y}
-          onChange={setY}
+          value={frame.draftY}
+          onChangeApply={frame.save}
+          onChange={frame.setDraftY}
         />
         <PropertyField
           leadingChild={renderLabel('W')}
-          value={width}
-          onChange={setWidth}
+          value={frame.draftWidth}
+          onChangeApply={frame.save}
+          onChange={frame.setDraftWidth}
         />
         <PropertyField
           leadingChild={renderLabel('H')}
-          value={height}
-          onChange={setHeight}
+          value={frame.draftHeight}
+          onChangeApply={frame.save}
+          onChange={frame.setDraftHeight}
         />
       </div>
     </PropertyPanel>

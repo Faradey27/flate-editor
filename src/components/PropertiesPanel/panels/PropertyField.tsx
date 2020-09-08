@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import clsx from 'clsx';
 
 import classes from './PropertyField.module.scss';
@@ -9,7 +9,8 @@ interface PropertyFieldProps {
   withTrailingInput?: boolean;
   leadingChild?: React.ReactNode;
   leadingChildStyle?: object;
-  onChange: (value: string) => void;
+  onChange: (value: string | number) => void;
+  onChangeApply?: () => void;
   onTrailingInputChange?: (value: string) => void;
 }
 
@@ -19,14 +20,43 @@ const PropertyField: React.FC<PropertyFieldProps> = ({
   trailingInputValue,
   withTrailingInput,
   onChange,
+  onChangeApply,
   onTrailingInputChange,
 }) => {
+  const escapeRef = useRef({ escaped: false, originalValue: value });
+
+  const handleKeyPress = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      const { key } = e;
+
+      if (key === 'Enter') {
+        (e.target as HTMLElement).blur();
+        onChangeApply?.();
+      }
+      if (key === 'Escape') {
+        escapeRef.current.escaped = true;
+        (e.target as HTMLElement).blur();
+      }
+    },
+    [onChangeApply]
+  );
+
+  const handleBlur = useCallback(() => {
+    if (!escapeRef.current.escaped) {
+      onChangeApply?.();
+      escapeRef.current.escaped = false;
+    } else {
+      onChange(escapeRef.current.originalValue);
+    }
+  }, [onChange, onChangeApply]);
+
   const handleInputFocus = useCallback(
     (e: React.FocusEvent<HTMLInputElement>) => {
       e?.target?.select();
     },
     []
   );
+
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange(e.target.value);
@@ -54,7 +84,9 @@ const PropertyField: React.FC<PropertyFieldProps> = ({
         className={classes.input}
         value={value}
         onFocus={handleInputFocus}
+        onBlur={handleBlur}
         onChange={handleChange}
+        onKeyDown={handleKeyPress}
       />
       {withTrailingInput ? (
         <input
