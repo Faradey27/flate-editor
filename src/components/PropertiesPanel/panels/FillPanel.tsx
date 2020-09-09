@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { useSelectedComponent } from 'hooks/useSelectedComponentFrame';
@@ -12,11 +13,16 @@ const messages = defineMessages({
   },
 });
 
-const handleChange = () => {};
-
 const FillPanel: React.FC<{}> = () => {
   const intl = useIntl();
   const { fillColor } = useSelectedComponent();
+
+  const handleChange = useCallback(
+    (value) => {
+      fillColor.setDraftFillColor(String(value));
+    },
+    [fillColor]
+  );
 
   const trailingValue = '100%';
 
@@ -39,6 +45,7 @@ const FillPanel: React.FC<{}> = () => {
         value={fillColor.draftFillColor.toUpperCase()}
         trailingInputValue={trailingValue}
         onChange={handleChange}
+        onChangeApply={fillColor.save}
         onTrailingInputChange={handleChange}
       />
     </PropertyPanel>

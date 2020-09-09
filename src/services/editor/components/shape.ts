@@ -107,10 +107,14 @@ export const createShape: ShapeFactoryCreator = ({
     stateManager.setSelectedComponentId(id);
   });
 
+  const styleOverrides: Partial<ShapeStyle> = {};
+
+  const getStyles = () => ({ ...style, ...styleOverrides });
+
   let hasSelection = false;
 
   const reRender = () => {
-    render(shape, frame, style);
+    render(shape, frame, getStyles());
     renderSelection({
       selection,
       x: frame.selectionX,
@@ -132,14 +136,14 @@ export const createShape: ShapeFactoryCreator = ({
       const borderWidth = 2 / zoom.getZoom().scaleX;
       const borderColor = 0x138eff;
       render(shape, frame, {
-        ...style,
+        ...getStyles(),
         borderWidth,
         borderColor,
       });
     });
 
     shape.on('pointerout', () => {
-      render(shape, frame, style);
+      render(shape, frame, getStyles());
     });
   }
 
@@ -150,9 +154,10 @@ export const createShape: ShapeFactoryCreator = ({
     type: 'shape',
     shape,
     selection,
-    getFillColor: () => style.fillColor.toString(16),
-    setFillColor: () => {
-      // TODO
+    getFillColor: () => getStyles().fillColor.toString(16),
+    setFillColor: (color) => {
+      styleOverrides.fillColor = Number(`0x${color}`);
+      reRender();
     },
     showSelection: () => {
       hasSelection = true;

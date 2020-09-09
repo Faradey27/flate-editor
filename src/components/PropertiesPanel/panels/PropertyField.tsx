@@ -31,14 +31,14 @@ const PropertyField: React.FC<PropertyFieldProps> = ({
 
       if (key === 'Enter') {
         (e.target as HTMLElement).blur();
-        onChangeApply?.();
+        escapeRef.current.escaped = false;
       }
       if (key === 'Escape') {
         escapeRef.current.escaped = true;
         (e.target as HTMLElement).blur();
       }
     },
-    [onChangeApply]
+    []
   );
 
   const handleBlur = useCallback(() => {
