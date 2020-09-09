@@ -4,24 +4,23 @@ import { Component } from 'services/editor/components/types';
 
 export const useComponentStroke = (component?: Component | null) => {
   const [draftStrokeColor, setDraftStrokeColor] = useState<string>(
-    component ? component?.shape.line.color.toString(16) : ''
+    component ? component.getStrokeColor() : 'FFFFFF'
   );
   const [draftStrokeWidth, setDraftStrokeWidth] = useState(
-    component?.shape.line.width
+    component?.getStrokeWidth() || 0
   );
 
   useEffect(() => {
-    if (component) {
-      setDraftStrokeColor(component.shape.line.color.toString(16));
-      setDraftStrokeWidth(component?.shape.line.width);
-    }
+    setDraftStrokeColor(component?.getStrokeColor() || 'FFFFFF');
+    setDraftStrokeWidth(component?.getStrokeWidth() || 0);
   }, [component]);
 
   const save = useCallback(() => {
-    if (!component) {
-      // TODO
+    if (component) {
+      component.setStrokeColor(draftStrokeColor);
+      component.setStrokeWidth(Number(draftStrokeWidth));
     }
-  }, [component]);
+  }, [component, draftStrokeColor, draftStrokeWidth]);
 
   return {
     draftStrokeColor,

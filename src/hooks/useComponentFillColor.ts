@@ -4,11 +4,11 @@ import { Component } from 'services/editor/components/types';
 
 export const useComponentFillColor = (component?: Component | null) => {
   const [draftFillColor, setDraftFillColor] = useState<string>(
-    component ? component.getFillColor() : ''
+    component ? component.getFillColor() : 'FFFFFF'
   );
 
   useEffect(() => {
-    setDraftFillColor(component ? component.getFillColor() : '');
+    setDraftFillColor(component ? component.getFillColor() : 'FFFFFF');
   }, [component]);
 
   const save = useCallback(() => {

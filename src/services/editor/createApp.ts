@@ -50,6 +50,12 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
     interactive: false,
   });
 
+  app.stage.interactive = true;
+
+  app.stage.on('pointerdown', () => {
+    statePlugin.setSelectedComponentId(null);
+  });
+
   global.addEventListener('resize', () => {
     canvas.shape.height = Math.min(
       1168,

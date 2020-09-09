@@ -17,9 +17,9 @@ const defaultFrame: ShapeFrame = {
 
 const defaultStyle: ShapeStyle = {
   fillColor: 0x77cce7,
-  borderColor: 0x000000,
+  strokeColor: 0x77cce7,
   borderRadius: 0,
-  borderWidth: 0,
+  strokeWidth: 0,
 };
 
 const renderRect = (
@@ -29,8 +29,9 @@ const renderRect = (
 ) => {
   graphics.clear();
   graphics.beginFill(style.fillColor);
-  if (style.borderWidth) {
-    graphics.lineStyle(style.borderWidth, style.borderColor);
+
+  if (style.strokeWidth) {
+    graphics.lineStyle(style.strokeWidth, style.strokeColor);
   }
 
   const { x, y, width, height } = frame;

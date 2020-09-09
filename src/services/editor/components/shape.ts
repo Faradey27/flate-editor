@@ -17,8 +17,8 @@ export interface ShapeFrame {
 
 export interface ShapeStyle {
   fillColor: number;
-  borderWidth?: number;
-  borderColor?: number;
+  strokeWidth: number;
+  strokeColor: number;
   borderRadius?: number;
 }
 
@@ -103,7 +103,8 @@ export const createShape: ShapeFactoryCreator = ({
     enableDragAndDrop([shape], stateManager);
   }
 
-  shape.on('pointerdown', () => {
+  shape.on('pointerdown', (e: any) => {
+    e.stopPropagation();
     stateManager.setSelectedComponentId(id);
   });
 
@@ -133,12 +134,12 @@ export const createShape: ShapeFactoryCreator = ({
       if (hasSelection || stateManager.isDragging()) {
         return;
       }
-      const borderWidth = 2 / zoom.getZoom().scaleX;
-      const borderColor = 0x138eff;
+      const strokeWidth = 2 / zoom.getZoom().scaleX;
+      const strokeColor = 0x138eff;
       render(shape, frame, {
         ...getStyles(),
-        borderWidth,
-        borderColor,
+        strokeWidth,
+        strokeColor,
       });
     });
 
@@ -157,6 +158,16 @@ export const createShape: ShapeFactoryCreator = ({
     getFillColor: () => getStyles().fillColor.toString(16),
     setFillColor: (color) => {
       styleOverrides.fillColor = Number(`0x${color}`);
+      reRender();
+    },
+    getStrokeColor: () => getStyles().strokeColor.toString(16),
+    setStrokeColor: (color) => {
+      styleOverrides.strokeColor = Number(`0x${color}`);
+      reRender();
+    },
+    getStrokeWidth: () => getStyles().strokeWidth,
+    setStrokeWidth: (value) => {
+      styleOverrides.strokeWidth = value;
       reRender();
     },
     showSelection: () => {

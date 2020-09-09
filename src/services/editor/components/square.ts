@@ -16,9 +16,9 @@ const defaultFrame: ShapeFrame = {
 
 const defaultStyle: ShapeStyle = {
   fillColor: 0x77cce7,
-  borderColor: 0x000000,
+  strokeColor: 0x77cce7,
   borderRadius: 0,
-  borderWidth: 0,
+  strokeWidth: 0,
 };
 
 export const createSquare = ({ shape }: ShapeDI) => ({

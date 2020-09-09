@@ -16,9 +16,9 @@ const defaultFrame: ShapeFrame = {
 
 const defaultStyle: ShapeStyle = {
   fillColor: 0x77cce7,
-  borderColor: 0x000000,
+  strokeColor: 0x77cce7,
   borderRadius: size.borderRadius,
-  borderWidth: 0,
+  strokeWidth: 0,
 };
 
 export const createRoundRect = ({ shape }: ShapeDI) => ({

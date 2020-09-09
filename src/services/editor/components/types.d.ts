@@ -36,4 +36,8 @@ export interface Component {
   off: (type: ComponentEvent, cb: PositionChangeCB) => void;
   getFillColor: () => string;
   setFillColor: (color: string) => void;
+  getStrokeColor: () => string;
+  setStrokeColor: (color: string) => void;
+  getStrokeWidth: () => number;
+  setStrokeWidth: (value: number) => void;
 }

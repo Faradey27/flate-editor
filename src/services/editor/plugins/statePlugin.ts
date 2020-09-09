@@ -9,7 +9,7 @@ export interface StatePlugin extends Plugin {
   isDragging: () => boolean;
   addComponents: (components: Component[]) => void;
   getComponents: () => Component[];
-  setSelectedComponentId: (id: string) => void;
+  setSelectedComponentId: (id: string | null) => void;
   getSelectedComponent: () => Component | null;
   on: (
     type: 'componentSelect',
@@ -45,7 +45,7 @@ const createListeners = () => {
 
 export const initStatePlugin = (app: Application): StatePlugin => {
   let isDrag = false;
-  let selectedComponentId: string = '';
+  let selectedComponentId: string | null = '';
   const components: Component[] = [];
 
   const { listeners, componentSelectCb } = createListeners();
@@ -62,7 +62,7 @@ export const initStatePlugin = (app: Application): StatePlugin => {
       isDrag = false;
     },
     isDragging: () => isDrag,
-    setSelectedComponentId: (id: string) => {
+    setSelectedComponentId: (id: string | null) => {
       if (selectedComponentId === id) {
         return;
       }
@@ -81,6 +81,7 @@ export const initStatePlugin = (app: Application): StatePlugin => {
       }
 
       selectedComponentId = id;
+
       componentSelectCb(nextSelectedComponent || null);
     },
     getSelectedComponent: () =>

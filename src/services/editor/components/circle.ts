@@ -17,9 +17,9 @@ const defaultFrame: ShapeFrame = {
 
 const defaultStyle: ShapeStyle = {
   fillColor: 0x77cce7,
-  borderColor: 0x000000,
+  strokeColor: 0x77cce7,
   borderRadius: 0,
-  borderWidth: 0,
+  strokeWidth: 0,
 };
 
 const renderCircle = (
@@ -31,6 +31,10 @@ const renderCircle = (
   graphics.beginFill(style.fillColor);
 
   const { x, y, width, height } = frame;
+
+  if (style.strokeWidth) {
+    graphics.lineStyle(style.strokeWidth, style.strokeColor);
+  }
 
   if (width !== height) {
     graphics.drawEllipse(0, 0, width / 2, height / 2);

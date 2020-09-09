@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { useSelectedComponent } from 'hooks/useSelectedComponentFrame';
@@ -13,11 +14,23 @@ const messages = defineMessages({
   },
 });
 
-const handleChange = () => {};
-
 const StrokePanel: React.FC<{}> = () => {
   const intl = useIntl();
   const { stroke } = useSelectedComponent();
+
+  const handleChangeColor = useCallback(
+    (value) => {
+      stroke.setDraftStrokeColor(String(value));
+    },
+    [stroke]
+  );
+
+  const handleChangeStrokeWidth = useCallback(
+    (value) => {
+      stroke.setDraftStrokeWidth(value);
+    },
+    [stroke]
+  );
 
   const trailingValue = '100%';
 
@@ -43,13 +56,14 @@ const StrokePanel: React.FC<{}> = () => {
         leadingChild={leadingChildColor}
         value={stroke.draftStrokeColor.toUpperCase()}
         trailingInputValue={trailingValue}
-        onChange={handleChange}
-        onTrailingInputChange={handleChange}
+        onChange={handleChangeColor}
+        onChangeApply={stroke.save}
       />
       <PropertyField
         leadingChild={renderLabel('W')}
         value={stroke.draftStrokeWidth || 0}
-        onChange={handleChange}
+        onChange={handleChangeStrokeWidth}
+        onChangeApply={stroke.save}
       />
     </PropertyPanel>
   );
