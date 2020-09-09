@@ -1,47 +1,32 @@
 import { Graphics } from 'pixi.js';
 
-import { ShapeDI } from './shape';
+import { GenericShapeProps, ShapeDI, ShapeFrame, ShapeStyle } from './shape';
 import { getShapeSize } from './shapeSize';
 import { Component } from './types.d';
 
-interface RectStyle {
-  fillColor: number;
-  borderWidth: number;
-  borderColor: number;
-  borderRadius: number;
-}
-
-interface RectFrame {
-  width: number;
-  height: number;
-  x: number;
-  y: number;
-}
-
-export interface RectProps {
-  frame?: Partial<RectFrame>;
-  style?: Partial<RectStyle>;
-  draggable?: boolean;
-  interactive?: boolean;
-}
-
 const size = getShapeSize('rect', 'large');
 
-const defaultFrame: RectFrame = {
+const defaultFrame: ShapeFrame = {
   width: size.width,
   height: size.height,
   x: 0,
   y: 0,
+  selectionX: 0,
+  selectionY: 0,
 };
 
-const defaultStyle: RectStyle = {
+const defaultStyle: ShapeStyle = {
   fillColor: 0x77cce7,
   borderColor: 0x000000,
   borderRadius: 0,
   borderWidth: 0,
 };
 
-const renderRect = (graphics: Graphics, frame: RectFrame, style: RectStyle) => {
+const renderRect = (
+  graphics: Graphics,
+  frame: ShapeFrame,
+  style: ShapeStyle
+) => {
   graphics.clear();
   graphics.beginFill(style.fillColor);
   if (style.borderWidth) {
@@ -62,66 +47,25 @@ const renderRect = (graphics: Graphics, frame: RectFrame, style: RectStyle) => {
   graphics.endFill();
 };
 
-export const createRect = ({ shape, usePlugin, renderSelection }: ShapeDI) => ({
+export const createRect = ({ shape }: ShapeDI) => ({
   frame = defaultFrame,
   style = defaultStyle,
   draggable = true,
   interactive = true,
-}: RectProps = {}): Component => {
+}: GenericShapeProps): Component => {
   const frameWithDefaults = { ...defaultFrame, ...frame };
   const styleWithDefaults = { ...defaultStyle, ...style };
 
-  let hasSelection = false;
-  const zoom = usePlugin('zoom');
-  const stateManager = usePlugin('state');
-
-  const rect = shape({ draggable });
-
-  const reRender = () => {
-    renderRect(rect.shape, frameWithDefaults, styleWithDefaults);
-    renderSelection({
-      selection: rect.selection,
-      width: frameWithDefaults.width,
-      height: frameWithDefaults.height,
-      hasSelection,
-      interactive,
-    });
-  };
-
-  if (interactive) {
-    zoom.on('change', reRender);
-
-    rect.shape.on('pointerover', () => {
-      if (hasSelection || stateManager.isDragging()) {
-        return;
-      }
-      const borderWidth = 2 / zoom.getZoom().scaleX;
-      const borderColor = 0x138eff;
-      renderRect(rect.shape, frameWithDefaults, {
-        ...styleWithDefaults,
-        borderWidth,
-        borderColor,
-      });
-    });
-
-    rect.shape.on('pointerout', () => {
-      renderRect(rect.shape, frameWithDefaults, styleWithDefaults);
-    });
-  }
-
-  reRender();
+  const rect = shape({
+    render: renderRect,
+    frame: frameWithDefaults,
+    style: styleWithDefaults,
+    draggable,
+    interactive,
+  });
 
   return {
     ...rect,
-    showSelection: () => {
-      hasSelection = true;
-      reRender();
-    },
-    hideSelection: () => {
-      hasSelection = false;
-      reRender();
-    },
-    getFillColor: () => style.fillColor,
     type: 'rect',
-  } as any;
+  };
 };

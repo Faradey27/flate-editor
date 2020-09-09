@@ -1,95 +1,67 @@
 import { Graphics } from 'pixi.js';
 
-import { ShapeDI } from './shape';
+import { GenericShapeProps, ShapeDI, ShapeFrame, ShapeStyle } from './shape';
 import { getShapeSize } from './shapeSize';
 import { Component } from './types.d';
 
-interface CircleProps {
-  radius?: number;
-  ry?: number;
-  left?: number;
-  top?: number;
-  color?: number;
-  interactive?: boolean;
-}
-
 const size = getShapeSize('circle', 'large');
 
-export const createCircle = ({
-  shape,
-  usePlugin,
-  renderSelection,
-}: ShapeDI) => ({
-  radius = size.width / 2,
-  ry,
-  left = 0,
-  top = 0,
-  color = 0x77cce7,
-  interactive = true,
-}: CircleProps = {}): Component => {
-  let hasSelection = false;
-  const zoom = usePlugin('zoom');
-  const stateManager = usePlugin('state');
-  const circle = shape({ draggable: true });
+const defaultFrame: ShapeFrame = {
+  width: size.width,
+  height: size.height,
+  x: 0,
+  y: 0,
+  selectionX: -size.width / 2,
+  selectionY: -size.height / 2,
+};
 
-  const renderCircle = (graphics: Graphics) => {
-    graphics.beginFill(color);
-    if (ry) {
-      graphics.drawEllipse(0, 0, radius, ry);
-    } else {
-      graphics.drawCircle(0, 0, radius);
-    }
-    graphics.position.set(
-      graphics.position.x || left,
-      graphics.position.y || top
-    );
-    graphics.endFill();
-  };
+const defaultStyle: ShapeStyle = {
+  fillColor: 0x77cce7,
+  borderColor: 0x000000,
+  borderRadius: 0,
+  borderWidth: 0,
+};
 
-  const reRender = () => {
-    circle.shape.clear();
-    renderCircle(circle.shape);
-    renderSelection({
-      x: -radius,
-      y: ry ? -ry : -radius,
-      selection: circle.selection,
-      width: radius * 2,
-      height: ry ? ry * 2 : radius * 2,
-      hasSelection,
-      interactive,
-    });
-  };
+const renderCircle = (
+  graphics: Graphics,
+  frame: ShapeFrame,
+  style: ShapeStyle
+) => {
+  graphics.clear();
+  graphics.beginFill(style.fillColor);
 
-  if (interactive) {
-    zoom.on('change', reRender);
+  const { x, y, width, height } = frame;
 
-    circle.shape.on('pointerover', () => {
-      if (hasSelection || stateManager.isDragging()) {
-        return;
-      }
-      circle.shape.lineStyle(2 / zoom.getZoom().scaleX, 0x138eff);
-      renderCircle(circle.shape);
-    });
-
-    circle.shape.on('pointerout', () => {
-      circle.shape.clear();
-      renderCircle(circle.shape);
-    });
+  if (width !== height) {
+    graphics.drawEllipse(0, 0, width / 2, height / 2);
+  } else {
+    graphics.drawCircle(0, 0, width / 2);
   }
 
-  renderCircle(circle.shape);
+  // then we set desired position
+  graphics.position.set(graphics.position.x || x, graphics.position.y || y);
+  graphics.endFill();
+};
+
+export const createCircle = ({ shape }: ShapeDI) => ({
+  frame,
+  style,
+  draggable = true,
+  interactive = true,
+}: GenericShapeProps): Component => {
+  const frameWithDefaults = { ...defaultFrame, ...frame };
+  const styleWithDefaults = { ...defaultStyle, ...style };
+
+  const circle = shape({
+    render: renderCircle,
+    frame: frameWithDefaults,
+    style: styleWithDefaults,
+    draggable,
+    interactive,
+  });
 
   return {
     ...circle,
-    showSelection: () => {
-      hasSelection = true;
-      reRender();
-    },
-    hideSelection: () => {
-      hasSelection = false;
-      reRender();
-    },
-    getFillColor: () => color,
     type: 'circle',
   };
 };

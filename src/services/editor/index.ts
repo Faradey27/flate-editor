@@ -40,7 +40,7 @@ export const initializeEditor = ({
       app.run();
 
       const rect = app.shapes.rect({ frame: { x: 100, y: 100 } });
-      const circle = app.shapes.circle({ left: 400, top: 300 });
+      const circle = app.shapes.circle({ frame: { x: 400, y: 300 } });
 
       app.render([rect, circle]);
       // app.connect();
@@ -54,8 +54,7 @@ export const initializeEditor = ({
       const dropPosition = getDropPosition(position, item.id);
       if (shape) {
         const newComponent = shape({
-          left: dropPosition.x,
-          top: dropPosition.y,
+          frame: dropPosition,
         });
         app.render(newComponent);
         app.usePlugin('state').setSelectedComponentId(newComponent.id);

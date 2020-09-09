@@ -1,36 +1,43 @@
 import { createCircle } from './circle';
-import { ShapeDI } from './shape';
+import { GenericShapeProps, ShapeDI, ShapeFrame, ShapeStyle } from './shape';
 import { getShapeSize } from './shapeSize';
 import { Component } from './types';
 
-export interface EllipseProps {
-  rx?: number;
-  ry?: number;
-  left?: number;
-  top?: number;
-  color?: number;
-  interactive?: boolean;
-}
-
 const size = getShapeSize('ellipse', 'large');
 
-export const createEllipse = ({
-  shape,
-  usePlugin,
-  renderSelection,
-}: ShapeDI) => ({
-  rx = size.width / 2,
-  ry = size.height / 2,
-  left = 0,
-  top = 0,
-  color = 0x77cce7,
+const defaultFrame: ShapeFrame = {
+  width: size.width,
+  height: size.height,
+  x: 0,
+  y: 0,
+  selectionX: -size.width / 2,
+  selectionY: -size.height / 2,
+};
+
+const defaultStyle: ShapeStyle = {
+  fillColor: 0x77cce7,
+  borderColor: 0x000000,
+  borderRadius: 0,
+  borderWidth: 0,
+};
+
+export const createEllipse = ({ shape }: ShapeDI) => ({
+  style,
+  frame,
+  draggable = true,
   interactive = true,
-}: EllipseProps = {}): Component => {
+}: GenericShapeProps): Component => {
+  const frameWithDefaults = { ...defaultFrame, ...frame };
+  const styleWithDefaults = { ...defaultStyle, ...style };
+
   const ellipse = createCircle({
     shape,
-    usePlugin,
-    renderSelection,
-  })({ radius: rx, ry, left, top, color, interactive });
+  })({
+    frame: frameWithDefaults,
+    style: styleWithDefaults,
+    draggable,
+    interactive,
+  });
 
   return ellipse;
 };

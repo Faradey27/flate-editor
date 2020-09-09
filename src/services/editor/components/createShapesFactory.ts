@@ -14,8 +14,9 @@ import { createText } from './text';
 import { createTriangle } from './triangle';
 
 export const createShapesFactory = (usePlugin: UsePlugin) => {
-  const shape = createShape(usePlugin);
   const renderSelection = createSelectionRenderer(usePlugin);
+
+  const shape = createShape({ usePlugin, renderSelection });
 
   const rect = createRect({ shape, usePlugin, renderSelection });
   const roundRect = createRoundRect({ shape, usePlugin, renderSelection });
