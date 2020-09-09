@@ -1,88 +1,55 @@
 import { Graphics, Text } from 'pixi.js';
 
-import { ShapeDI } from './shape';
+import { GenericShapeProps, ShapeDI, ShapeFrame, ShapeStyle } from './shape';
 import { getShapeSize } from './shapeSize';
 import { Component } from './types';
 
-export interface TextProps {
-  width?: number;
-  height?: number;
-  left?: number;
-  top?: number;
-  color?: number;
-  borderRadius?: number;
-  draggable?: boolean;
-  interactive?: boolean;
-}
-
 const size = getShapeSize('text', 'large');
 
-export const createText = ({ shape, usePlugin, renderSelection }: ShapeDI) => ({
-  width = size.width,
-  height = size.height,
-  left = 0,
-  top = 0,
-  color = 0x77cce7,
+const defaultFrame: ShapeFrame = {
+  width: size.width,
+  height: size.height,
+  x: 0,
+  y: 0,
+  selectionX: 0,
+  selectionY: 0,
+};
+
+const defaultStyle: ShapeStyle = {
+  fillColor: 0x77cce7,
+  borderColor: 0x000000,
+  borderRadius: 0,
+  borderWidth: 0,
+};
+
+const renderText = (graphics: Graphics, frame: ShapeFrame) => {
+  graphics.clear();
+  const { x, y } = frame;
+  const basicText = new Text('Text');
+  graphics.addChild(basicText);
+  // then we set desired position
+  graphics.position.set(graphics.position.x || x, graphics.position.y || y);
+};
+
+export const createText = ({ shape }: ShapeDI) => ({
+  frame,
+  style,
   draggable = true,
   interactive = true,
-}: TextProps = {}): Component => {
-  let hasSelection = false;
-  const zoom = usePlugin('zoom');
-  const stateManager = usePlugin('state');
+}: GenericShapeProps = {}): Component => {
+  const frameWithDefaults = { ...defaultFrame, ...frame };
+  const styleWithDefaults = { ...defaultStyle, ...style };
 
-  const text = shape({ draggable });
-
-  const renderText = (graphics: Graphics) => {
-    const basicText = new Text('Text');
-
-    graphics.position.set(
-      graphics.position.x || left,
-      graphics.position.y || top
-    );
-    graphics.addChild(basicText);
-  };
-
-  const reRender = () => {
-    text.shape.clear();
-    renderText(text.shape);
-    renderSelection({
-      selection: text.selection,
-      width,
-      height,
-      hasSelection,
-      interactive,
-    });
-  };
-
-  if (interactive) {
-    zoom.on('change', reRender);
-
-    text.shape.on('pointerover', () => {
-      if (hasSelection || stateManager.isDragging()) {
-        return;
-      }
-      text.shape.lineStyle(2 / zoom.getZoom().scaleX, 0x138eff);
-      renderText(text.shape);
-    });
-
-    text.shape.on('pointerout', () => {
-      text.shape.clear();
-      renderText(text.shape);
-    });
-  }
-
-  reRender();
+  const text = shape({
+    render: renderText,
+    frame: frameWithDefaults,
+    style: styleWithDefaults,
+    draggable,
+    interactive,
+  });
 
   return {
     ...text,
-    showSelection: () => {
-      hasSelection = true;
-      reRender();
-    },
-    hideSelection: () => {
-      hasSelection = false;
-      reRender();
-    },
     type: 'text',
   };
 };

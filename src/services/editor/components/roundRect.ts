@@ -1,42 +1,40 @@
 import { createRect } from './rect';
-import { ShapeDI } from './shape';
+import { GenericShapeProps, ShapeDI, ShapeFrame, ShapeStyle } from './shape';
 import { getShapeSize } from './shapeSize';
 import { Component } from './types';
 
-export interface SquareProps {
-  width?: number;
-  height?: number;
-  left?: number;
-  top?: number;
-  color?: number;
-  borderRadius?: number;
-  draggable?: boolean;
-  interactive?: boolean;
-}
-
 const size = getShapeSize('roundRect', 'large');
 
-export const createRoundRect = ({
-  shape,
-  usePlugin,
-  renderSelection,
-}: ShapeDI) => ({
-  width = size.width,
-  height = size.height,
-  left = 0,
-  top = 0,
-  color = 0x77cce7,
+const defaultFrame: ShapeFrame = {
+  width: size.width,
+  height: size.height,
+  x: 0,
+  y: 0,
+  selectionX: 0,
+  selectionY: 0,
+};
+
+const defaultStyle: ShapeStyle = {
+  fillColor: 0x77cce7,
+  borderColor: 0x000000,
+  borderRadius: size.borderRadius,
+  borderWidth: 0,
+};
+
+export const createRoundRect = ({ shape }: ShapeDI) => ({
+  frame,
+  style,
   draggable = true,
   interactive = true,
-  borderRadius = size.borderRadius,
-}: SquareProps = {}): Component => {
+}: GenericShapeProps = {}): Component => {
+  const frameWithDefaults = { ...defaultFrame, ...frame };
+  const styleWithDefaults = { ...defaultStyle, ...style };
+
   const roundRect = createRect({
     shape,
-    usePlugin,
-    renderSelection,
   })({
-    frame: { width, height, x: left, y: top },
-    style: { fillColor: color, borderRadius },
+    frame: frameWithDefaults,
+    style: styleWithDefaults,
     draggable,
     interactive,
   });

@@ -1,43 +1,46 @@
 import { createRect } from './rect';
-import { ShapeDI } from './shape';
+import { GenericShapeProps, ShapeDI, ShapeFrame, ShapeStyle } from './shape';
 import { getShapeSize } from './shapeSize';
 import { Component } from './types';
 
-export interface SquareProps {
-  width?: number;
-  height?: number;
-  left?: number;
-  top?: number;
-  color?: number;
-  draggable?: boolean;
-  interactive?: boolean;
-}
-
 const size = getShapeSize('square', 'large');
 
-export const createSquare = ({
-  shape,
-  usePlugin,
-  renderSelection,
-}: ShapeDI) => ({
-  width = size.width,
-  height = size.height,
-  left = 0,
-  top = 0,
-  color = 0x77cce7,
+const defaultFrame: ShapeFrame = {
+  width: size.width,
+  height: size.height,
+  x: 0,
+  y: 0,
+  selectionX: 0,
+  selectionY: 0,
+};
+
+const defaultStyle: ShapeStyle = {
+  fillColor: 0x77cce7,
+  borderColor: 0x000000,
+  borderRadius: 0,
+  borderWidth: 0,
+};
+
+export const createSquare = ({ shape }: ShapeDI) => ({
+  style,
+  frame,
   draggable = true,
   interactive = true,
-}: SquareProps = {}): Component => {
+}: GenericShapeProps = {}): Component => {
+  const frameWithDefaults = { ...defaultFrame, ...frame };
+  const styleWithDefaults = { ...defaultStyle, ...style };
+
   const square = createRect({
     shape,
-    usePlugin,
-    renderSelection,
   })({
-    frame: { width, height, x: left, y: top },
-    style: { fillColor: color },
+    frame: frameWithDefaults,
+    style: styleWithDefaults,
     draggable,
     interactive,
   });
 
-  return square;
+  return {
+    ...square,
+    type: 'square',
+  };
 };
