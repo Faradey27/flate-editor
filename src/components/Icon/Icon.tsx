@@ -1,4 +1,4 @@
-import React, { FunctionComponent, SVGProps } from 'react';
+import { FC, FunctionComponent, SVGProps } from 'react';
 import clsx from 'clsx';
 
 import DownArrowIcon from './assets/down-arrow.svg';
@@ -9,7 +9,7 @@ import styles from './Icon.module.scss';
 
 export type IconName = 'downArrow' | 'upArrow' | 'menu' | 'play';
 
-interface IconProps extends React.SVGProps<SVGSVGElement> {
+interface IconProps extends SVGProps<SVGSVGElement> {
   iconName: IconName;
   className?: string;
 }
@@ -23,7 +23,7 @@ const IconsMap: {
   play: PlayIcon,
 };
 
-const Icon: React.FC<IconProps> = ({ iconName, className, ...svgProps }) => {
+const Icon: FC<IconProps> = ({ iconName, className, ...svgProps }) => {
   const SelectedIcon = IconsMap[iconName];
   return (
     <SelectedIcon

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { FC, memo } from 'react';
 
 import { EditorShape } from 'services/editor/components/types';
 
@@ -8,7 +8,7 @@ export interface ShapeDragPreviewProps {
   id: EditorShape;
 }
 
-const ShapeDragPreview: React.FC<ShapeDragPreviewProps> = ({ id }) => {
+const ShapeDragPreview: FC<ShapeDragPreviewProps> = ({ id }) => {
   return <Shape name={id} mode="dropPreview" />;
 };
 

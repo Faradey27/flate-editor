@@ -150,7 +150,10 @@ export const createShape: ShapeFactoryCreator = ({
     type: 'shape',
     shape,
     selection,
-    getFillColor: () => style.fillColor,
+    getFillColor: () => style.fillColor.toString(16),
+    setFillColor: () => {
+      // TODO
+    },
     showSelection: () => {
       hasSelection = true;
       reRender();

@@ -34,4 +34,6 @@ export interface Component {
   showSelection: () => void;
   on: (type: ComponentEvent, cb: PositionChangeCB) => void;
   off: (type: ComponentEvent, cb: PositionChangeCB) => void;
+  getFillColor: () => string;
+  setFillColor: (color: string) => void;
 }

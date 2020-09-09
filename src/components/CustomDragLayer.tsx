@@ -1,10 +1,10 @@
-import React from 'react';
+import { CSSProperties } from 'react';
 import { useDragLayer, XYCoord } from 'react-dnd';
 
 import { dragType } from './Shape';
 import ShapeDragPreview from './Shape/ShapeDragPreview';
 
-const layerStyles: React.CSSProperties = {
+const layerStyles: CSSProperties = {
   position: 'fixed',
   pointerEvents: 'none',
   zIndex: 100,
