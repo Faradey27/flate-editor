@@ -6,6 +6,8 @@ import { StatePlugin } from './plugins/statePlugin';
 export interface Editor {
   run: () => void;
   release: () => void;
+  getAppBackgroundColor: () => string;
+  setAppBackgroundColor: (color: string) => void;
   dropShape: (
     item: { id: EditorShape },
     position: { x: number; y: number }
@@ -44,6 +46,11 @@ export const initializeEditor = ({
 
       app.render([rect, circle]);
       // app.connect();
+    },
+    getAppBackgroundColor: () =>
+      app.getApp().renderer.backgroundColor.toString(16),
+    setAppBackgroundColor: (color: string) => {
+      app.getApp().renderer.backgroundColor = Number(`0x${color}`);
     },
     stateManager: app.stateManager,
     dropShape: (

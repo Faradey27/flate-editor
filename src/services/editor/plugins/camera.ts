@@ -23,6 +23,9 @@ export const initCameraPlugin = (
         app.stage.x + e.offsetX - lastPos.x,
         app.stage.y + e.offsetY - lastPos.y
       );
+
+      (app.stage as any).hitArea.x -= e.offsetX - lastPos.x; // eslint-disable-line
+      (app.stage as any).hitArea.y -= e.offsetY - lastPos.y; // eslint-disable-line
       lastPos = { x: e.offsetX, y: e.offsetY };
     }
   };

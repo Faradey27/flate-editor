@@ -42,6 +42,7 @@ export const useComponentFrame = (component?: Component | null) => {
   }, [component, draftX, draftY, draftWidth, draftHeight]);
 
   return {
+    hidden: !component,
     draftX,
     draftY,
     draftWidth,

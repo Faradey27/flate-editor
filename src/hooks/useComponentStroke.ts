@@ -23,6 +23,7 @@ export const useComponentStroke = (component?: Component | null) => {
   }, [component, draftStrokeColor, draftStrokeWidth]);
 
   return {
+    hidden: !component,
     draftStrokeColor,
     draftStrokeWidth,
     setDraftStrokeColor,

@@ -1,4 +1,4 @@
-import { Application } from 'pixi.js';
+import { Application, Rectangle } from 'pixi.js';
 
 import { createShapesFactory } from './components/createShapesFactory';
 import { Component } from './components/types';
@@ -47,10 +47,17 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
       fillColor: 0xffffff,
     },
     draggable: false,
-    interactive: false,
+    interactive: true,
   });
 
   app.stage.interactive = true;
+
+  app.stage.hitArea = new Rectangle(
+    0,
+    0,
+    app.renderer.width,
+    app.renderer.height
+  );
 
   app.stage.on('pointerdown', () => {
     statePlugin.setSelectedComponentId(null);
@@ -63,8 +70,6 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
     );
     canvas.shape.position.x = app.view.offsetWidth / 2 - 826 / 2;
   });
-
-  app.stage.addChild(canvas.shape);
 
   const methods = {
     run: () => {
@@ -95,9 +100,12 @@ export const createApp = ({ view }: { view?: HTMLCanvasElement }) => {
       app.destroy();
       return methods;
     },
+    getApp: () => app,
     getStage: () => app.stage,
     usePlugin,
   };
+
+  methods.render(canvas);
 
   return methods;
 };

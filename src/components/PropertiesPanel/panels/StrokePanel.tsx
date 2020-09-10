@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useSelectedComponent } from 'hooks/useSelectedComponentFrame';
+import { useSelectedComponent } from 'hooks/useSelectedComponent';
 
 import { renderLabel } from './FramePanel';
 import PropertyField from './PropertyField';
@@ -45,7 +45,7 @@ const StrokePanel: React.FC<{}> = () => {
     />
   );
 
-  if (!stroke.draftStrokeColor) {
+  if (!stroke.draftStrokeColor || stroke.hidden) {
     return null;
   }
 

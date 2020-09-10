@@ -1,22 +1,28 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { Component } from 'services/editor/components/types';
+import { useEditor } from 'services/editor/reactBindings';
 
 export const useComponentFillColor = (component?: Component | null) => {
+  const editor = useEditor();
   const [draftFillColor, setDraftFillColor] = useState<string>(
     component ? component.getFillColor() : 'FFFFFF'
   );
 
   useEffect(() => {
-    setDraftFillColor(component ? component.getFillColor() : 'FFFFFF');
-  }, [component]);
+    const fillColor = component
+      ? component.getFillColor()
+      : editor?.getAppBackgroundColor();
+    setDraftFillColor(fillColor || 'FFFFFF');
+  }, [component, editor]);
 
   const save = useCallback(() => {
-    if (!component) {
-      return;
+    if (!component && editor) {
+      editor.setAppBackgroundColor(draftFillColor);
+    } else if (component) {
+      component.setFillColor(draftFillColor);
     }
-    component.setFillColor(draftFillColor);
-  }, [component, draftFillColor]);
+  }, [editor, component, draftFillColor]);
 
   return {
     draftFillColor,

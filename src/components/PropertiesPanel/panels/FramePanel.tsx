@@ -1,6 +1,6 @@
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useSelectedComponent } from 'hooks/useSelectedComponentFrame';
+import { useSelectedComponent } from 'hooks/useSelectedComponent';
 
 import classes from './FramePanel.module.scss';
 import PropertyField from './PropertyField';
@@ -21,6 +21,10 @@ const FramePanel: React.FC<{}> = () => {
   const intl = useIntl();
 
   const { frame } = useSelectedComponent();
+
+  if (frame.hidden) {
+    return null;
+  }
 
   return (
     <PropertyPanel title={intl.formatMessage(messages.frame)}>

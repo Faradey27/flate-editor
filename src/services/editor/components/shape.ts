@@ -96,8 +96,8 @@ export const createShape: ShapeFactoryCreator = ({
 
   shape.addChild(selection);
   shape.position.cb = positionCb;
-  shape.interactive = Boolean(interactive);
-  shape.buttonMode = Boolean(interactive);
+  shape.interactive = Boolean(draggable || interactive); // enable pointer events
+  shape.buttonMode = Boolean(draggable); // show mouse pointer cursor
 
   if (draggable) {
     enableDragAndDrop([shape], stateManager);
@@ -116,20 +116,22 @@ export const createShape: ShapeFactoryCreator = ({
 
   const reRender = () => {
     render(shape, frame, getStyles());
-    renderSelection({
-      selection,
-      x: frame.selectionX,
-      y: frame.selectionY,
-      width: frame.width,
-      height: frame.height,
-      hasSelection,
-      interactive,
-    });
+    if (draggable) {
+      renderSelection({
+        selection,
+        x: frame.selectionX,
+        y: frame.selectionY,
+        width: frame.width,
+        height: frame.height,
+        hasSelection,
+        interactive,
+      });
+    }
   };
 
-  if (interactive) {
-    zoom.on('change', reRender);
+  zoom.on('change', reRender);
 
+  if (draggable) {
     shape.on('pointerover', () => {
       if (hasSelection || stateManager.isDragging()) {
         return;
@@ -176,6 +178,7 @@ export const createShape: ShapeFactoryCreator = ({
     },
     hideSelection: () => {
       hasSelection = false;
+
       reRender();
     },
     on: (type: ComponentEvent, cb: PositionChangeCB) => {
